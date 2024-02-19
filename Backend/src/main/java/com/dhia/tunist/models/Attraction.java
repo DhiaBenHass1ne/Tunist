@@ -110,6 +110,30 @@ public class Attraction {
 		public void setState(String state) {
 			this.state = state;
 		}
+
+		public Date getCreatedAt() {
+			return createdAt;
+		}
+
+		public void setCreatedAt(Date createdAt) {
+			this.createdAt = createdAt;
+		}
+
+		public Date getUpdatedAt() {
+			return updatedAt;
+		}
+
+		public void setUpdatedAt(Date updatedAt) {
+			this.updatedAt = updatedAt;
+		}
+
+		public User getPublisher() {
+			return publisher;
+		}
+
+		public void setPublisher(User publisher) {
+			this.publisher = publisher;
+		}
 		
 		
 		
