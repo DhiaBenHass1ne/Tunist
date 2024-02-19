@@ -41,9 +41,7 @@ public class Attraction {
 		@Size(min = 3, max = 150, message = "Username must be between 3 and 30 characters")
 		private String description;
 		
-		@ManyToOne(fetch=FetchType.LAZY)
-		@JoinColumn(name="user_id")
-		private User author;
+		
 		
 		@OneToMany(mappedBy="author", fetch = FetchType.LAZY)
 	    private List<Attraction> attractions;
@@ -58,6 +56,13 @@ public class Attraction {
 	        joinColumns = @JoinColumn(name = "tour_id"),
 	        inverseJoinColumns = @JoinColumn(name = "attraction_id"))
 	    private List<PrivateTour> privateTours;
+		
+		@ManyToMany
+	    @JoinTable(
+	        name = "attraction_tour",
+	        joinColumns = @JoinColumn(name = "tour_id"),
+	        inverseJoinColumns = @JoinColumn(name = "attraction_id"))
+	    private List<PublicTour> publicTours;
 
 
 		

@@ -48,6 +48,9 @@ public class Guide {
 	@OneToMany(mappedBy="privateGuide", fetch = FetchType.LAZY)
     private PrivateTour privateTour;
 	
+	@OneToMany(mappedBy="publicGuide", fetch = FetchType.LAZY)
+    private PrivateTour publicTour;
+	
     @Column(columnDefinition = "boolean default true")
 	private boolean available;
 	
