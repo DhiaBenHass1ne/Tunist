@@ -1,14 +1,20 @@
 package com.dhia.tunist.models;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -47,6 +53,25 @@ public class User {
 	@Size(min = 8, max = 128, message = "Confirm Password must be between 8 and 128 characters")
 	private String confirm;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="tourist_id")
+	private Tourist tourist;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="guide_id")
+	private Guide guide;
+	
+    @OneToMany(mappedBy="author", fetch = FetchType.LAZY)
+    private List<Attraction> attractions;
+    
+    @OneToMany(mappedBy="publisher", fetch = FetchType.LAZY)
+    private List<Article> articles;
+    
+    @OneToMany(mappedBy="loaner", fetch = FetchType.LAZY)
+    private List<House> houses;
+	
+	
+	
 	
 	
 	
@@ -54,6 +79,8 @@ public class User {
 	
 	public User() {
 	}
+
+
 
 	// This will not allow the createdAt column to be updated after creation
 	@Column(updatable = false)
@@ -150,6 +177,64 @@ public class User {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	
+	public Tourist getTourist() {
+		return tourist;
+	}
+
+
+
+	public void setTourist(Tourist tourist) {
+		this.tourist = tourist;
+	}
+
+
+
+	public Guide getGuide() {
+		return guide;
+	}
+
+
+
+	public void setGuide(Guide guide) {
+		this.guide = guide;
+	}
+
+
+
+	public List<Attraction> getAttractions() {
+		return attractions;
+	}
+
+
+
+	public void setAttractions(List<Attraction> attractions) {
+		this.attractions = attractions;
+	}
+
+
+
+	public List<Article> getArticles() {
+		return articles;
+	}
+
+
+
+	public void setArticles(List<Article> articles) {
+		this.articles = articles;
+	}
+
+
+
+	public List<House> getHouses() {
+		return houses;
+	}
+
+
+
+	public void setHouses(List<House> houses) {
+		this.houses = houses;
 	}
 
 }
