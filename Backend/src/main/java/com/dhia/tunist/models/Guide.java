@@ -46,10 +46,10 @@ public class Guide {
     private BigDecimal price;
 	
 	@OneToMany(mappedBy="privateGuide", fetch = FetchType.LAZY)
-    private PrivateTour privateTour;
+    private List<PrivateTour> privateTour;
 	
 	@OneToMany(mappedBy="publicGuide", fetch = FetchType.LAZY)
-    private PublicTour publicTour;
+    private List<PublicTour> publicTour;
 	
     @Column(columnDefinition = "boolean default true")
 	private boolean available;
@@ -58,13 +58,7 @@ public class Guide {
 	private List<String> languages;
     
     
-    public PrivateTour getPrivateTour() {
-		return privateTour;
-	}
 
-	public void setPrivateTour(PrivateTour privateTour) {
-		this.privateTour = privateTour;
-	}
 
 
 	@OneToOne(mappedBy = "guide")
@@ -121,13 +115,7 @@ public class Guide {
 
 	
 
-	public PublicTour getPublicTour() {
-		return publicTour;
-	}
 
-	public void setPublicTour(PublicTour publicTour) {
-		this.publicTour = publicTour;
-	}
 
 	public BigDecimal getPrice() {
 		return price;
@@ -177,6 +165,22 @@ public class Guide {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public List<PrivateTour> getPrivateTour() {
+		return privateTour;
+	}
+
+	public void setPrivateTour(List<PrivateTour> privateTour) {
+		this.privateTour = privateTour;
+	}
+
+	public List<PublicTour> getPublicTour() {
+		return publicTour;
+	}
+
+	public void setPublicTour(List<PublicTour> publicTour) {
+		this.publicTour = publicTour;
 	}
 	
 	

@@ -11,8 +11,7 @@ import com.dhia.tunist.models.PrivateTour;
 @Repository
 public interface PrivateTourRepository extends CrudRepository<PrivateTour, Long> {
 
-	// for logging user
-	Optional<PrivateTour>findByEmail(String email);
+
 	
 	List<PrivateTour>findAll();
 	

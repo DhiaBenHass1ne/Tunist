@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -40,9 +41,8 @@ public class Article {
 	@Size(min = 2, message = "Please enter a valid content !")
 	private String content;
 	
-
 	@NotEmpty(message="Media is required!")
-	private List<Map<String, String>> media;
+	private List<String> media;
 	
 
 	private Article() {}
@@ -73,14 +73,16 @@ public class Article {
 		this.id = id;
 	}
 
-	public List<Map<String, String>> getMedia() {
+
+
+
+	public List<String> getMedia() {
 		return media;
 	}
 
-	public void setMedia(List<Map<String, String>> media) {
+	public void setMedia(List<String> media) {
 		this.media = media;
 	}
-
 
 	public User getPublisher() {
 		return publisher;

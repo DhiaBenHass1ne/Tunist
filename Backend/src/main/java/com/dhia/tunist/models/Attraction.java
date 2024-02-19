@@ -59,7 +59,7 @@ public class Attraction {
 
 		
 		
-		private List<Map<String, String>> images;
+		private List<String> images;
 		
 		@NotEmpty(message="State is required!")
 		private String state;
@@ -115,11 +115,13 @@ public class Attraction {
 			this.description = description;
 		}
 
-		public List<Map<String, String>> getImages() {
+
+
+		public List<String> getImages() {
 			return images;
 		}
 
-		public void setImages(List<Map<String, String>> images) {
+		public void setImages(List<String> images) {
 			this.images = images;
 		}
 

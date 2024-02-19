@@ -3,7 +3,6 @@ package com.dhia.tunist.models;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -49,7 +48,7 @@ public class House {
 	private boolean available=true;
 	
 	@NotEmpty(message="Media is required!")
-	private List<Map<String, String>> media;
+	private List<String> media;
 	
 	private double rating;
 
@@ -113,11 +112,13 @@ public class House {
 		this.available = available;
 	}
 
-	public List<Map<String, String>> getMedia() {
+
+
+	public List<String> getMedia() {
 		return media;
 	}
 
-	public void setMedia(List<Map<String, String>> media) {
+	public void setMedia(List<String> media) {
 		this.media = media;
 	}
 

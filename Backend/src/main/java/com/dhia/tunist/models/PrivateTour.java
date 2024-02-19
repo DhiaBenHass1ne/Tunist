@@ -20,7 +20,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tours")
+@Table(name = "privateTours")
 public class PrivateTour {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,7 +63,7 @@ public class PrivateTour {
 	}
 	
 	
-	PrivateTour(){}
+	public PrivateTour(){}
 
 	public Long getId() {
 		return id;

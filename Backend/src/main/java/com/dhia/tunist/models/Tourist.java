@@ -1,6 +1,7 @@
 package com.dhia.tunist.models;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,25 +26,18 @@ public class Tourist {
 	private Long id;
 	
 
-    @OneToOne(mappedBy = "users")
+    @OneToOne(mappedBy = "tourist")
     private User user;
     
 	@NotEmpty(message = "Nationality is required!")
 	private String nationality;
 	
 	@OneToMany(mappedBy="privateTourist", fetch = FetchType.LAZY)
-    private PrivateTour privateTour;
+    private List<PrivateTour> privateTour;
     
 	@OneToMany(mappedBy="publicTourist", fetch = FetchType.LAZY)
-    private PublicTour publicTour;
+    private List<PublicTour> publicTour;
     
-	public PrivateTour getPrivateTour() {
-		return privateTour;
-	}
-
-	public void setPrivateTour(PrivateTour privateTour) {
-		this.privateTour = privateTour;
-	}
 
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -84,11 +78,13 @@ public class Tourist {
 		this.user = user;
 	}
 
-	public PublicTour getPublicTour() {
+
+
+	public List<PublicTour> getPublicTour() {
 		return publicTour;
 	}
 
-	public void setPublicTour(PublicTour publicTour) {
+	public void setPublicTour(List<PublicTour> publicTour) {
 		this.publicTour = publicTour;
 	}
 
@@ -114,6 +110,14 @@ public class Tourist {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public List<PrivateTour> getPrivateTour() {
+		return privateTour;
+	}
+
+	public void setPrivateTour(List<PrivateTour> privateTour) {
+		this.privateTour = privateTour;
 	}
 	
 	

@@ -20,7 +20,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tours")
+@Table(name = "publicTours")
 public class PublicTour {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

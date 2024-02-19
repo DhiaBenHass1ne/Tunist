@@ -11,8 +11,6 @@ import com.dhia.tunist.models.Article;
 @Repository
 public interface ArticleRepository extends CrudRepository<Article, Long> {
 
-	// for logging user
-	Optional<Article>findByEmail(String email);
 	
 	List<Article>findAll();
 	

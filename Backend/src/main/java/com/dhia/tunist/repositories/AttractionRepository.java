@@ -10,9 +10,6 @@ import com.dhia.tunist.models.Attraction;
 
 @Repository
 public interface AttractionRepository extends CrudRepository<Attraction, Long> {
-
-	// for logging user
-	Optional<Attraction>findByEmail(String email);
 	
 	List<Attraction>findAll();
 	
