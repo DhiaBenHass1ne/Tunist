@@ -1,17 +1,14 @@
 package com.dhia.tunist.models;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -30,7 +27,12 @@ public class User {
 
 	@NotEmpty(message = "Username is required!")
 	@Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
-	private String userName;
+	private String firstName;
+	
+	@NotEmpty(message = "Username is required!")
+	@Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
+	private String lastName;
+	
 
 	@NotEmpty(message = "Email is required!")
 	@Email(message = "Please enter a valid email!")
@@ -52,6 +54,7 @@ public class User {
 	
 	public User() {
 	}
+
 	// This will not allow the createdAt column to be updated after creation
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -103,13 +106,6 @@ public class User {
 		this.id = id;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
 
 	public String getEmail() {
 		return email;
@@ -133,6 +129,27 @@ public class User {
 
 	public void setConfirm(String confirm) {
 		this.confirm = confirm;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+
+
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+
+
+	public String getLastName() {
+		return lastName;
+	}
+
+
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 }
