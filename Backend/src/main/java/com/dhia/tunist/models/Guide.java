@@ -49,7 +49,7 @@ public class Guide {
     private PrivateTour privateTour;
 	
 	@OneToMany(mappedBy="publicGuide", fetch = FetchType.LAZY)
-    private PrivateTour publicTour;
+    private PublicTour publicTour;
 	
     @Column(columnDefinition = "boolean default true")
 	private boolean available;
@@ -118,6 +118,16 @@ public class Guide {
 	}
 
 
+
+	
+
+	public PublicTour getPublicTour() {
+		return publicTour;
+	}
+
+	public void setPublicTour(PublicTour publicTour) {
+		this.publicTour = publicTour;
+	}
 
 	public BigDecimal getPrice() {
 		return price;

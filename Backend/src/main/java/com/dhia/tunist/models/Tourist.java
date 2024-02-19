@@ -84,6 +84,14 @@ public class Tourist {
 		this.user = user;
 	}
 
+	public PublicTour getPublicTour() {
+		return publicTour;
+	}
+
+	public void setPublicTour(PublicTour publicTour) {
+		this.publicTour = publicTour;
+	}
+
 	public String getNationality() {
 		return nationality;
 	}
