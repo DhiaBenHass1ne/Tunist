@@ -17,7 +17,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -41,16 +40,7 @@ public class Attraction {
 		@Size(min = 3, max = 150, message = "Username must be between 3 and 30 characters")
 		private String description;
 		
-		@ManyToOne(fetch=FetchType.LAZY)
-		@JoinColumn(name="user_id")
-		private User author;
 		
-		@OneToMany(mappedBy="author", fetch = FetchType.LAZY)
-	    private List<Attraction> attractions;
-	    
-		@OneToMany(mappedBy="privateAttractions", fetch = FetchType.LAZY)
-	    private PrivateTour tour ;
-
 		
 		@ManyToMany
 	    @JoinTable(
@@ -58,6 +48,13 @@ public class Attraction {
 	        joinColumns = @JoinColumn(name = "tour_id"),
 	        inverseJoinColumns = @JoinColumn(name = "attraction_id"))
 	    private List<PrivateTour> privateTours;
+		
+		@ManyToMany
+	    @JoinTable(
+	        name = "attraction_tour",
+	        joinColumns = @JoinColumn(name = "tour_id"),
+	        inverseJoinColumns = @JoinColumn(name = "attraction_id"))
+	    private List<PublicTour> publicTours;
 
 
 		
@@ -77,8 +74,8 @@ public class Attraction {
 		private Date updatedAt;
 		
 		@ManyToOne(fetch = FetchType.LAZY)
-	    @JoinColumn(name="publisher")
-	    private User publisher;
+	    @JoinColumn(name="user_id")
+	    private User author;
 
 		@PrePersist
 		protected void onCreate() {
@@ -150,13 +147,31 @@ public class Attraction {
 			this.updatedAt = updatedAt;
 		}
 
-		public User getPublisher() {
-			return publisher;
+		public List<PrivateTour> getPrivateTours() {
+			return privateTours;
 		}
 
-		public void setPublisher(User publisher) {
-			this.publisher = publisher;
+		public void setPrivateTours(List<PrivateTour> privateTours) {
+			this.privateTours = privateTours;
 		}
+
+		public List<PublicTour> getPublicTours() {
+			return publicTours;
+		}
+
+		public void setPublicTours(List<PublicTour> publicTours) {
+			this.publicTours = publicTours;
+		}
+
+		public User getAuthor() {
+			return author;
+		}
+
+		public void setAuthor(User author) {
+			this.author = author;
+		}
+
+	
 		
 		
 		

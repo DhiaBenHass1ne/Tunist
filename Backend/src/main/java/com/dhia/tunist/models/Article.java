@@ -1,6 +1,8 @@
 package com.dhia.tunist.models;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,50 +12,49 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "tourists")
-public class Tourist {
+@Table(name = "articles")
+public class Article {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-
-    @OneToOne(mappedBy = "users")
-    private User user;
-    
-	@NotEmpty(message = "Nationality is required!")
-	private String nationality;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User publisher;
 	
-	@OneToMany(mappedBy="privateTourist", fetch = FetchType.LAZY)
-    private PrivateTour privateTour;
-    
-	@OneToMany(mappedBy="publicTourist", fetch = FetchType.LAZY)
-    private PublicTour publicTour;
-    
-	public PrivateTour getPrivateTour() {
-		return privateTour;
-	}
+	@NotBlank(message = "The Title is required.")
+	@Size(min = 2, message = "Please enter a valid title !")
+	private String title;
+	
+	@NotBlank(message = "The content is required.")
+	@Size(min = 2, message = "Please enter a valid content !")
+	private String content;
+	
 
-	public void setPrivateTour(PrivateTour privateTour) {
-		this.privateTour = privateTour;
-	}
+	@NotEmpty(message="Media is required!")
+	private List<Map<String, String>> media;
+	
 
+	private Article() {}
+	
+	
+	
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
-
-	
-
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updatedAt;
-
+	
 	@PrePersist
 	protected void onCreate() {
 		this.createdAt = new Date();
@@ -64,10 +65,6 @@ public class Tourist {
 		this.updatedAt = new Date();
 	}
 
-	
-	public Tourist() {
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -76,28 +73,37 @@ public class Tourist {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public List<Map<String, String>> getMedia() {
+		return media;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setMedia(List<Map<String, String>> media) {
+		this.media = media;
 	}
 
-	public PublicTour getPublicTour() {
-		return publicTour;
+
+	public User getPublisher() {
+		return publisher;
 	}
 
-	public void setPublicTour(PublicTour publicTour) {
-		this.publicTour = publicTour;
+	public void setPublisher(User publisher) {
+		this.publisher = publisher;
 	}
 
-	public String getNationality() {
-		return nationality;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setNationality(String nationality) {
-		this.nationality = nationality;
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public Date getCreatedAt() {
@@ -115,8 +121,4 @@ public class Tourist {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
-	
-
-
 }
