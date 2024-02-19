@@ -1,12 +1,12 @@
 package com.dhia.tunist.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.dhia.tunist.models.LoginUser;
 import com.dhia.tunist.models.User;
@@ -15,7 +15,7 @@ import com.dhia.tunist.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
-@Controller
+@RestController
 public class UserController {
 
     // Add once service is implemented:
