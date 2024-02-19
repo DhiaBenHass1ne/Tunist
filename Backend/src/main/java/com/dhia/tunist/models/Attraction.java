@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,10 +14,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+<<<<<<< HEAD
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+=======
+import jakarta.persistence.ManyToOne;
+>>>>>>> 908e793ecef74d58ce4b78160c3bdd897e2fee8c
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -74,6 +79,10 @@ public class Attraction {
 
 		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		private Date updatedAt;
+		
+		@ManyToOne(fetch = FetchType.LAZY)
+	    @JoinColumn(name="publisher")
+	    private User publisher;
 
 		@PrePersist
 		protected void onCreate() {
@@ -127,6 +136,30 @@ public class Attraction {
 
 		public void setState(String state) {
 			this.state = state;
+		}
+
+		public Date getCreatedAt() {
+			return createdAt;
+		}
+
+		public void setCreatedAt(Date createdAt) {
+			this.createdAt = createdAt;
+		}
+
+		public Date getUpdatedAt() {
+			return updatedAt;
+		}
+
+		public void setUpdatedAt(Date updatedAt) {
+			this.updatedAt = updatedAt;
+		}
+
+		public User getPublisher() {
+			return publisher;
+		}
+
+		public void setPublisher(User publisher) {
+			this.publisher = publisher;
 		}
 		
 		
