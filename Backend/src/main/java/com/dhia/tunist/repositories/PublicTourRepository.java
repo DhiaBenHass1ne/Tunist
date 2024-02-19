@@ -7,9 +7,9 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.dhia.tunist.models.PublicTour;
 
-public interface PulicTourRepository extends CrudRepository<PublicTour, Long> {
+public interface PublicTourRepository extends CrudRepository<PublicTour, Long> {
 	
-	Optional<PublicTour>findByEmail(String email);
+
 	
 	List<PublicTour>findAll();
 	
