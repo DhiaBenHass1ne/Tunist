@@ -1,6 +1,10 @@
 package com.dhia.tunist.models;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,9 +12,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -30,8 +38,10 @@ public class Guide {
 	@Size(min=1,max=5 )
 	private double rating;
 	
-	@NotNull(message = "Rating is required")
-	private double price;
+	@NotNull(message = "Price is required!")
+	@Positive(message="Price can't be negative!")
+    @DecimalMin(value = "0.0", inclusive = false, message="Price must be greater than zero!")
+    private BigDecimal price;
 	
 	
     @Column(columnDefinition = "boolean default true")
@@ -43,6 +53,25 @@ public class Guide {
     
     @OneToOne(mappedBy = "guide")
     private User user;
+    
+	@Column(updatable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date createdAt;
+
+	
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date updatedAt;
+
+	@PrePersist
+	protected void onCreate() {
+		this.createdAt = new Date();
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedAt = new Date();
+	}
     
     public Guide() {
     }
@@ -72,13 +101,17 @@ public class Guide {
 		this.rating = rating;
 	}
 
-	public double getPrice() {
+
+
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
+
 
 	public boolean isAvailable() {
 		return available;
