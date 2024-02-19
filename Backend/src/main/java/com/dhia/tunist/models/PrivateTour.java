@@ -1,6 +1,8 @@
 package com.dhia.tunist.models;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,38 +12,37 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name = "tourists")
-public class Tourist {
+@Table(name = "tours")
+public class PrivateTour {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-
-    @OneToOne(mappedBy = "users")
-    private User user;
-    
-	@NotEmpty(message = "Nationality is required!")
-	private String nationality;
 	
-	@OneToMany(mappedBy="privateTourist", fetch = FetchType.LAZY)
-    private PrivateTour privateTour;
-    
-	public PrivateTour getPrivateTour() {
-		return privateTour;
-	}
+	private LocalDateTime date;
+	
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "guide_id")
+	private Guide privateGuide;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "tourist_id")
+	private Tourist privateTourist;
+	
+	 @ManyToMany(mappedBy = "privateTours")
+	 private List<Attraction> privateAttractions;
 
-	public void setPrivateTour(PrivateTour privateTour) {
-		this.privateTour = privateTour;
-	}
-
+	
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
@@ -60,10 +61,9 @@ public class Tourist {
 	protected void onUpdate() {
 		this.updatedAt = new Date();
 	}
-
 	
-	public Tourist() {
-	}
+	
+	PrivateTour(){}
 
 	public Long getId() {
 		return id;
@@ -73,20 +73,36 @@ public class Tourist {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public LocalDateTime getDate() {
+		return date;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setDate(LocalDateTime date) {
+		this.date = date;
 	}
 
-	public String getNationality() {
-		return nationality;
+	public List<Attraction> getPrivateAttractions() {
+		return privateAttractions;
 	}
 
-	public void setNationality(String nationality) {
-		this.nationality = nationality;
+	public void setPrivateAttractions(List<Attraction> privateAttractions) {
+		this.privateAttractions = privateAttractions;
+	}
+
+	public Guide getPrivateGuide() {
+		return privateGuide;
+	}
+
+	public void setPrivateGuide(Guide privateGuide) {
+		this.privateGuide = privateGuide;
+	}
+
+	public Tourist getPrivateTourist() {
+		return privateTourist;
+	}
+
+	public void setPrivateTourist(Tourist privateTourist) {
+		this.privateTourist = privateTourist;
 	}
 
 	public Date getCreatedAt() {
@@ -105,7 +121,4 @@ public class Tourist {
 		this.updatedAt = updatedAt;
 	}
 	
-	
-
-
 }

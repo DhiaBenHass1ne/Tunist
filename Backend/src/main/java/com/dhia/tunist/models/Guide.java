@@ -8,9 +8,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -43,6 +45,8 @@ public class Guide {
     @DecimalMin(value = "0.0", inclusive = false, message="Price must be greater than zero!")
     private BigDecimal price;
 	
+	@OneToMany(mappedBy="privateGuide", fetch = FetchType.LAZY)
+    private PrivateTour privateTour;
 	
     @Column(columnDefinition = "boolean default true")
 	private boolean available;
@@ -51,7 +55,31 @@ public class Guide {
 	private List<String> languages;
     
     
-    @OneToOne(mappedBy = "guide")
+    public PrivateTour getPrivateTour() {
+		return privateTour;
+	}
+
+	public void setPrivateTour(PrivateTour privateTour) {
+		this.privateTour = privateTour;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	@OneToOne(mappedBy = "guide")
     private User user;
     
 	@Column(updatable = false)
