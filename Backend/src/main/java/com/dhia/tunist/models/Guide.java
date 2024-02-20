@@ -12,11 +12,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -33,11 +35,12 @@ public class Guide {
 
 	
 	@NotEmpty(message = "Bio is required!")
-	@Size(min = 5, max = 50, message = "Bio must be between 5 and 50 characters")
+	@Size(min = 5, max = 200, message = "Bio must be between 5 and 200 characters")
 	private String bio;
 	
 	@NotNull(message = "Rating is required")
-	@Size(min=1,max=5 )
+	@DecimalMin(value = "0.0", inclusive=true, message="Rating min is 0")
+	@DecimalMax(value = "5.0", inclusive=true, message="Rating min is 5")
 	private double rating;
 	
 	@NotNull(message = "Price is required!")
@@ -62,6 +65,7 @@ public class Guide {
 
 
 	@OneToOne(mappedBy = "guide")
+	@JoinColumn(name="user_id")
     private User user;
     
 	@Column(updatable = false)
