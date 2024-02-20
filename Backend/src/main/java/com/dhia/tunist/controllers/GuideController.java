@@ -3,6 +3,8 @@ package com.dhia.tunist.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,9 +13,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dhia.tunist.models.Article;
 import com.dhia.tunist.models.Guide;
 import com.dhia.tunist.models.User;
 import com.dhia.tunist.services.GuideService;
@@ -30,57 +34,57 @@ public class GuideController {
 	@Autowired
 	private GuideService guideService;
 
+	
 	@Autowired
 	private UserService userService;
 	
+	
 	@GetMapping("")
-	public List<Guide> allGuides() {
+	public ResponseEntity<List<Guide>>  allGuides() {
 		List<Guide> allGuides = guideService.allGuides();
-		return allGuides;
+		return new ResponseEntity<>(allGuides,HttpStatus.OK) ;
 	}
 	
 	@PostMapping("")
-	public Guide newGuide(@Valid @ModelAttribute("guide") Guide guide , 
-            BindingResult result, Model model, HttpSession session) {
+	public ResponseEntity<Guide>  newGuide( @RequestBody @Valid Guide guide , 
+            HttpSession session) {
 		
-		if(result.hasErrors()) {
-            return null;
-        }
-		Long userid= (Long) session.getAttribute("user_id");
-		User user= userService.findUserById(userid);
-		guide.setUser(user);
+		
+//		Long userid= (Long) session.getAttribute("user_id");
+//		User user= userService.findUserById(userid);
+//		guide.setUser(user);
 		Guide newGuide = guideService.createGuide(guide);
-		user.setGuide(newGuide);
-		userService.updateUser(user);
+//		user.setGuide(newGuide);
+//		userService.updateUser(user);
 		
-		return guide;
-		
+		return new ResponseEntity<>(newGuide,HttpStatus.CREATED);	
 	}
 	
 	@GetMapping("/{id}")
-	public Guide oneGuide(@PathVariable("id") Long id) {
+	public ResponseEntity<Guide> oneGuide(@PathVariable("id") Long id) {
 		Guide guide= guideService.findGuideById(id);
-		return guide;
+		 if (guide != null) {
+	            return new ResponseEntity<>(guide, HttpStatus.OK);
+	        } else {
+	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	        }
 	}
 	
 	@PatchMapping("/{id}")
-	public Guide updateGuide(@Valid @ModelAttribute("guide") Guide guide , 
-            BindingResult result, @PathVariable("id") Long id, HttpSession session) {
-		
-		if(result.hasErrors()) {
-            return null;
-        }
+	public ResponseEntity<Guide>  updateGuide(@RequestBody @Valid Guide guide , 
+           @PathVariable("id") Long id, HttpSession session) {
+	
 		Long userid= (Long) session.getAttribute("user_id");
 		User user= userService.findUserById(userid);
 		guide.setUser(user);
 		guideService.updateGuide(guide);
-		return guide;
+    	return new ResponseEntity<>(guide, HttpStatus.CREATED);
 		
 	}
 	
 	@DeleteMapping("/{id}")
-	public String deleteGuide(@PathVariable("id") Long id) {
+	public ResponseEntity<Void> deleteGuide(@PathVariable("id") Long id) {
 		guideService.deleteGuide(id);
-		return "deleted guide with id= "+id+" successfully. ";
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }
