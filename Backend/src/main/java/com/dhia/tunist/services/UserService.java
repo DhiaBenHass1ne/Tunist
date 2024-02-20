@@ -70,4 +70,10 @@ public class UserService {
 	    public List<User> getAll(){
 	    	return userRepo.findAll();
 	    }
+	    
+	    public User updateUser(User u) {
+            u.setConfirm(u.getPassword());
+            return userRepo.save(u);
+
+        }
 }

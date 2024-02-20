@@ -25,7 +25,7 @@ public class TouristService {
 	}
 
 	// READ ONE
-	public Tourist findBookById(Long id) {
+	public Tourist findTouristById(Long id) {
 		Optional<Tourist> maybeTourist = touristRepository.findById(id);
 		if (maybeTourist.isPresent()) {
 			return maybeTourist.get();
