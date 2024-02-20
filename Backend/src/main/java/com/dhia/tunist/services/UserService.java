@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.dhia.tunist.models.LoginUser;
+import com.dhia.tunist.models.Tourist;
 import com.dhia.tunist.models.User;
 import com.dhia.tunist.repositories.UserRepository;
 
@@ -70,10 +71,18 @@ public class UserService {
 	    public List<User> getAll(){
 	    	return userRepo.findAll();
 	    }
+<<<<<<< HEAD
 	    
 	    public User updateUser(User u) {
             u.setConfirm(u.getPassword());
             return userRepo.save(u);
 
         }
+=======
+	    public User updateUser(User u) {
+			u.setConfirm(u.getPassword());
+	    	return userRepo.save(u);
+			
+		}
+>>>>>>> 0af6d44fb6a9b1de022727c84601ac0842e2f216
 }

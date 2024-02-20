@@ -58,7 +58,6 @@ public class User {
 	private Tourist tourist;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="guide_id")
 	private Guide guide;
 	
     @OneToMany(mappedBy="author", fetch = FetchType.LAZY)
