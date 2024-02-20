@@ -52,11 +52,6 @@ public class ArticleController {
     public ResponseEntity<List<Article>> findAllArticles() {
         List<Article> allArticles  = articleService.allArticles();
         
-//        if (foundArticle != null) {
-//            return new ResponseEntity<>(foundArticle, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
         
         return new ResponseEntity<>(allArticles, HttpStatus.OK);
     }

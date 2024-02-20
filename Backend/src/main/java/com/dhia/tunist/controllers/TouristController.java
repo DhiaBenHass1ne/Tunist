@@ -3,10 +3,11 @@ package com.dhia.tunist.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,24 +35,21 @@ public class TouristController {
 	private UserService userService;
 	
 	@GetMapping("")
-	public List<Tourist> getAll() {
+	public ResponseEntity<List<Tourist>> getAll() {
 		List<Tourist> allTourists = touristService.allTourists();
 		
-		return allTourists;
+		return new ResponseEntity<List<Tourist>>(allTourists,HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public Tourist getOne(@PathVariable("id")Long id) {
+	public ResponseEntity<Tourist> getOne(@PathVariable("id")Long id) {
 		Tourist tourist = touristService.findTouristById(id);
 		
-		return tourist;
+		return new ResponseEntity<>(tourist,HttpStatus.OK);
 	}
 	
 	@PostMapping("")
-	public Tourist createTourist(@RequestBody @Valid Tourist tourist , HttpSession s,BindingResult result) {
-		if (result.hasErrors()) {
-			return null;
-		}
+	public ResponseEntity<Tourist> createTourist(@RequestBody @Valid Tourist tourist , HttpSession s,BindingResult result) {
 		Long user_id= (Long) s.getAttribute("user_id");
 		User user = userService.findUserById(user_id);
 		tourist.setUser(user);
@@ -59,26 +57,21 @@ public class TouristController {
 		user.setTourist(newTourist);
 		userService.updateUser(user);
 		
-		return newTourist;
+		return new ResponseEntity<>(newTourist,HttpStatus.CREATED);
 		
 	}
 	
 	@PatchMapping("/{id}")
-    public Tourist updateTourist(@Valid @ModelAttribute("tourist") Tourist tourist , 
-            BindingResult result, @PathVariable("id") Long id, HttpSession session) {
-
-        if(result.hasErrors()) {
-            return null;
-        }
-        touristService.updateTourist(tourist);
-        return tourist;
-
+    public ResponseEntity<Tourist> updateTourist(@RequestBody @Valid Tourist tourist , 
+            BindingResult result, HttpSession session) {
+        Tourist updatedTourist = touristService.updateTourist(tourist);
+        return new ResponseEntity<>(updatedTourist, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteTourist(@PathVariable("id") Long id) {
+    public ResponseEntity<Long> deleteTourist(@PathVariable("id") Long id) {
         touristService.deleteTourist(id);
-        return "deleted tourist with id= "+id+" successfully.";
+        return new ResponseEntity<>(id,HttpStatus.OK);
     }
 	
 	
