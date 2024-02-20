@@ -25,7 +25,7 @@ public class GuideService {
 	}
 
 	// READ ONE
-	public Guide findBookById(Long id) {
+	public Guide findGuideById(Long id) {
 		Optional<Guide> maybeGuide = guideRepository.findById(id);
 		if (maybeGuide.isPresent()) {
 			return maybeGuide.get();
