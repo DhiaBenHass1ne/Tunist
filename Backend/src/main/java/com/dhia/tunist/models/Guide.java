@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -48,10 +49,10 @@ public class Guide {
     @DecimalMin(value = "0.0", inclusive = false, message="Price must be greater than zero!")
     private BigDecimal price;
 	
-	@OneToMany(mappedBy="privateGuide", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="privateGuide", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PrivateTour> privateTour;
 	
-	@OneToMany(mappedBy="publicGuide", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="publicGuide", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PublicTour> publicTour;
 	
     @Column(columnDefinition = "boolean default true")
@@ -64,7 +65,7 @@ public class Guide {
 
 
 
-	@OneToOne(mappedBy = "guide")
+	@OneToOne(mappedBy = "guide",cascade = CascadeType.ALL)
 	@JoinColumn(name="user_id")
     private User user;
     
