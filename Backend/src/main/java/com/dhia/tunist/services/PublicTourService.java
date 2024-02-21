@@ -25,7 +25,7 @@ public class PublicTourService {
 	}
 
 	// READ ONE
-	public PublicTour findBookById(Long id) {
+	public PublicTour findPublicTourById(Long id) {
 		Optional<PublicTour> maybePublicTour = publicTourRepository.findById(id);
 		if (maybePublicTour.isPresent()) {
 			return maybePublicTour.get();

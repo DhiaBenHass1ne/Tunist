@@ -25,7 +25,7 @@ public class PrivateTourService {
 	}
 
 	// READ ONE
-	public PrivateTour findBookById(Long id) {
+	public PrivateTour findPrivateTourById(Long id) {
 		Optional<PrivateTour> maybePrivateTour = privateTourRepository.findById(id);
 		if (maybePrivateTour.isPresent()) {
 			return maybePrivateTour.get();
