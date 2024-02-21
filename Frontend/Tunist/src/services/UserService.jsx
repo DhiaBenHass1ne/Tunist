@@ -14,9 +14,17 @@ class UserService{
         return axiosInstance.post(`/register`, data)
     }
 
-    getLogReg(){
-        return axiosInstance.get("")
+    login(data){
+        return axiosInstance.post(`/login`, data)
     }
+
+    logout(){
+        return axiosInstance.get(`/logout`)
+    }
+
+    // getLogReg(){
+    //     return axiosInstance.get("")
+    // }
 
     deleteUser(id){
         return axiosInstance.delete(`/${id}`)

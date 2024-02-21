@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,18 +27,18 @@ public class UserController {
      @Autowired
      private UserService userServ;
     
-    @GetMapping("")
-    public String index(Model model) {
-    
-        // Bind empty User and LoginUser objects to the JSP
-        // to capture the form input
-        model.addAttribute("newUser", new User());
-        model.addAttribute("newLogin", new LoginUser());
-        return "Users";
-    }
+//    @GetMapping("")
+//    public String index(Model model) {
+//    
+//        // Bind empty User and LoginUser objects to the JSP
+//        // to capture the form input
+//        model.addAttribute("newUser", new User());
+//        model.addAttribute("newLogin", new LoginUser());
+//        return "Users";
+//    }
     
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("newUser") User newUser, 
+    public String register( @RequestBody @Valid User newUser, 
             BindingResult result, Model model, HttpSession session) {
         
         // TO-DO Later -- call a register method in the service 
