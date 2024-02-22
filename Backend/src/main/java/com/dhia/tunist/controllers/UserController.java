@@ -16,6 +16,8 @@ import com.dhia.tunist.models.LoginUser;
 import com.dhia.tunist.models.User;
 import com.dhia.tunist.services.UserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -59,18 +61,24 @@ public class UserController {
 //        return "SUCCESSFULY REGISTERED!";
 //    }
     
-    @PostMapping("/register")
-    public ResponseEntity<Object> register(@Valid @RequestBody User newUser, 
-            BindingResult result , HttpSession session) {
-  
-        userServ.register(newUser, result);
-        if(result.hasErrors()) {
-           System.out.println(result.getAllErrors());
-           return ResponseEntity.status(400).body(result.getAllErrors());
-        }
-        session.setAttribute("user_id", newUser.getId());
-        return ResponseEntity.ok().body(newUser);
-    	}
+     @PostMapping("/register")
+     public ResponseEntity<Object> register(@Valid @RequestBody User newUser, 
+             BindingResult result, HttpSession session) {
+       
+         userServ.register(newUser, result);
+         
+         if (result.hasErrors()) {
+             System.out.println(result.getAllErrors());
+             return ResponseEntity.status(400).body(result.getAllErrors());
+         }
+         session.setAttribute("user_id", newUser.getId());
+         // Return a ResponseEntity with status 200 OK and the newly registered user
+         return ResponseEntity.ok().body(newUser);
+     }
+     
+
+
+    
     
     @PostMapping("/login")
     public ResponseEntity<Object> login(@Valid @RequestBody LoginUser newLogin, 

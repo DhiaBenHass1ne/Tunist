@@ -10,12 +10,22 @@ const axiosInstance = axios.create({
 
 class UserService{
 
-    register(data){
-        return axiosInstance.post(`/register`, data)
+    async register(data) {
+        try {
+            const response = await axiosInstance.post(`/register`, data);
+            return response;
+        } catch (error) {
+            console.error("Error during registration:", error);
+            throw new Error("Registration failed. Please try again."); // You can customize this error message
+        }
     }
 
     login(data){
         return axiosInstance.post(`/login`, data)
+    }
+
+    test(){
+        return axiosInstance.post(`/test-cookie`, )
     }
 
     logout(){
