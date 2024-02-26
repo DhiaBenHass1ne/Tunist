@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,6 +25,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/tourists")
 public class TouristController {
 
@@ -50,12 +52,14 @@ public class TouristController {
 	
 	@PostMapping("")
 	public ResponseEntity<Tourist> createTourist(@RequestBody @Valid Tourist tourist , HttpSession s,BindingResult result) {
-		Long user_id= (Long) s.getAttribute("user_id");
-		User user = userService.findUserById(user_id);
-		tourist.setUser(user);
+//		Long user_id= (Long) s.getAttribute("user_id");
+//		User user = userService.findUserById(userId);
+//		tourist.setUser(user);
+		User user = userService.findUserById(tourist.getUser().getId());
+		  tourist.setUser(user);
 		Tourist newTourist = touristService.createTourist(tourist);
-		user.setTourist(newTourist);
-		userService.updateUser(user);
+//		user.setTourist(newTourist);
+//		userService.updateUser(user);
 		
 		return new ResponseEntity<>(newTourist,HttpStatus.CREATED);
 		

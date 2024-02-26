@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 
 const UserType = ({ refreshPage }) => {
     const [userType, setUserType] = useState('')
-    const [fetched,setFetched] = useState({})
+    const [logged,setLogged] = useState({})
     const [guide, setGuide] = useState(
         {
             bio: '',
@@ -25,12 +25,14 @@ const UserType = ({ refreshPage }) => {
     const [tourist, setTourist] = useState(
         {
             nationality: "",
+            user:" "
         }
     )
     const ClearTouristForm = () => {
         setTourist(
             {
                 nationality: "",
+                user:""
             })
     }
 
@@ -67,6 +69,13 @@ const UserType = ({ refreshPage }) => {
         // UserService.register(newUser)
         // .then(res=>{console.log(res.data); refreshPage(); clearForm();})
         // .catch(err=>{console.log(err.response.data)})
+
+
+        axios.get("http://localhost:8080/api/users/"+Cookies.get('user_id'))
+        .then(res=>{console.log("logged user ===>",res.data); setLogged(res.data)} )
+        .catch(err=>console.log(err))
+
+        
         if(userType=="guide"){
 
             setGuide ( {...guide,languages: Object.keys(languages).filter(key => languages[key]==true)});
@@ -80,16 +89,16 @@ const UserType = ({ refreshPage }) => {
             .then(res=>{console.log(res.data); setGuide(res.data)} )
             .catch(err=>console.log(err))
         }
-        // if(userType=="tourist"){
-        //     axios.post("http://localhost:8080/api/guides/"+Cookies.get('user_id'),guide,{
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json'
-        //         })
-        // }
-        axios.get("http://localhost:8080/api/users/"+Cookies.get('user_id'))
-        .then(res=>{console.log("logged user ===>",res.data); setFetched(res.data)} )
-        .catch(err=>console.log(err))
+        if(userType=="tourist"){
+            setTourist({...tourist,user:logged})
+            axios.post("http://localhost:8080/api/tourists",tourist,{
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }})
+                .then(res=> console.log(res.data))
+                .catch(err => console.log(err))
+        }
 
         
     }
@@ -233,7 +242,7 @@ const UserType = ({ refreshPage }) => {
                             <>
                             <div className="form-group">
                                 <label>Nationality:</label>
-                                <input name="bio" className="form-control" onChange={(e) => { setTourist({ ...tourist, nationality: e.target.value }) }} value={guide.bio} />
+                                <input name="bio" className="form-control" onChange={(e) => { setTourist({ ...tourist, nationality: e.target.value }) }} value={tourist.nationality} />
                             </div>
                             </>
                             : "neithrer form"}
