@@ -39,6 +39,8 @@ public class Attraction {
 		@Size(min = 3, max = 150, message = "Username must be between 3 and 30 characters")
 		private String description;
 		
+		private List<String> media;
+		
 		
 		
 		@ManyToMany
@@ -170,6 +172,14 @@ public class Attraction {
 
 		public void setAuthor(User author) {
 			this.author = author;
+		}
+
+		public List<String> getMedia() {
+			return media;
+		}
+
+		public void setMedia(List<String> media) {
+			this.media = media;
 		}
 
 	

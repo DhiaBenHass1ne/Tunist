@@ -4,6 +4,7 @@ import LogReg from "./views/LogReg";
 import { Route, Routes } from "react-router-dom";
 import UserType from "./views/UserType";
 import Tours from "./views/Tours";
+import Attraction from "./views/Attraction";
 
 function App() {
   const [refresh, setRefresh] = useState(true)
@@ -17,6 +18,7 @@ function App() {
     <Route path="/logreg" element={<LogReg refreshPage={updateList} />} />
     <Route path="/type" element={ <UserType refreshPage={updateList} />}/>
     <Route path="/tours" element={<Tours  refreshPage={updateList}/>}/>
+    <Route path="/attractions" element={<Attraction  refreshPage={updateList}/>}/>
 
     </Routes>
    
