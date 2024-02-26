@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,7 +25,9 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/guides")
+
 public class GuideController {
 
 	
@@ -41,21 +45,24 @@ public class GuideController {
 		return new ResponseEntity<>(allGuides,HttpStatus.OK) ;
 	}
 	
-	@PostMapping("")
-	public ResponseEntity<Guide>  newGuide( @RequestBody @Valid Guide guide , 
-            HttpSession session) {
+    
+	@PostMapping("/{userId}") 
+	public ResponseEntity<Object>  newGuide( @PathVariable("userId") Long userId , @RequestBody @Valid Guide guide ,
+			 HttpSession session ) {
 		
 		
-//		Long userid= (Long) session.getAttribute("user_id");
-//		User user= userService.findUserById(userid);
-//		guide.setUser(user);
+		System.out.println("user id is ===> "+userId);
+		User user= userService.findUserById(userId);
+		
+		guide.setUser(user);
 		Guide newGuide = guideService.createGuide(guide);
 //		user.setGuide(newGuide);
 //		userService.updateUser(user);
-		
-		return new ResponseEntity<>(newGuide,HttpStatus.CREATED);	
+		System.out.println("user linked to guide is ===> id : "+guide.getUser().getId()+" ==== email : "+guide.getUser().getEmail());
+//		return new ResponseEntity<>(newGuide,HttpStatus.CREATED);	
+        return ResponseEntity.ok().body(newGuide);
+
 	}
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<Guide> oneGuide(@PathVariable("id") Long id) {
 		Guide guide= guideService.findGuideById(id);
@@ -71,6 +78,7 @@ public class GuideController {
            @PathVariable("id") Long id, HttpSession session) {
 	
 		Long userid= (Long) session.getAttribute("user_id");
+		
 		User user= userService.findUserById(userid);
 		guide.setUser(user);
 		guideService.updateGuide(guide);

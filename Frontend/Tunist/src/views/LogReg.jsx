@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 import Log from '../components/Log'
 import Reg from '../components/Reg'
-const LogReg = () => {
-    const [refresh, setRefresh] = useState(true)
+import Logout from '../components/Logout'
+import { Route, Routes } from 'react-router-dom'
+import UserType from './UserType'
+const LogReg = ({refreshPage}) => {
 
-    const updateList = ()=>{
-        setRefresh(!refresh);
-    }
 
     
 
   return (
     <>
-    <Log/>
-    <Reg refreshPage={updateList}/>
+    <Log refreshPage={refreshPage}g/>
+    <Reg refreshPage={refreshPage}/>
+    <Logout refreshPage={refreshPage}/>
     </>
   )
 }

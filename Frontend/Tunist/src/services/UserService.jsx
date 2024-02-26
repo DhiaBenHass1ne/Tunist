@@ -20,18 +20,27 @@ class UserService{
         }
     }
 
-    login(data){
-        return axiosInstance.post(`/login`, data)
+    async login(data){  try {
+        const response = await axiosInstance.post(`/login`, data);
+        return response;
+    } catch (error) {
+        console.error("Error during login:", error);
+        throw new Error("Login failed. Please try again."); // You can customize this error message
+    }
     }
 
     test(){
         return axiosInstance.post(`/test-cookie`, )
     }
 
-    logout(){
-        return axiosInstance.get(`/logout`)
+    async logout(){try {
+        const response = await axiosInstance.get(`/logout`);
+        return response;
+    } catch (error) {
+        console.error("Error during logout:", error);
+        throw new Error("Logout failed. Please try again."); // You can customize this error message
     }
-
+    }
     // getLogReg(){
     //     return axiosInstance.get("")
     // }

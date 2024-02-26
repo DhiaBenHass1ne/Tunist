@@ -3,21 +3,23 @@ package com.dhia.tunist.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dhia.tunist.models.Guide;
 import com.dhia.tunist.models.LoginUser;
 import com.dhia.tunist.models.User;
 import com.dhia.tunist.services.UserService;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -29,7 +31,9 @@ public class UserController {
     // Add once service is implemented:
      @Autowired
      private UserService userServ;
-    
+     @Autowired
+     private HttpSession httpSession;
+
 //    @GetMapping("")
 //    public String index(Model model) {
 //    
@@ -65,14 +69,15 @@ public class UserController {
      public ResponseEntity<Object> register(@Valid @RequestBody User newUser, 
              BindingResult result, HttpSession session) {
        
-         userServ.register(newUser, result);
+         User user= userServ.register(newUser, result);
          
          if (result.hasErrors()) {
              System.out.println(result.getAllErrors());
              return ResponseEntity.status(400).body(result.getAllErrors());
          }
-         session.setAttribute("user_id", newUser.getId());
-         // Return a ResponseEntity with status 200 OK and the newly registered user
+         session.setAttribute("user_id", user.getId());
+         System.out.println("registred id is ====>"+(Long) session.getAttribute("user_id") );
+         // Return a Respons!eEntity with status 200 OK and the newly registered user
          return ResponseEntity.ok().body(newUser);
      }
      
@@ -82,14 +87,24 @@ public class UserController {
     
     @PostMapping("/login")
     public ResponseEntity<Object> login(@Valid @RequestBody LoginUser newLogin, 
-            BindingResult result , HttpSession session) {
+            BindingResult result , HttpSession session, HttpServletRequest request) {
   
-        userServ.login(newLogin, result);
+        User loggedUser =userServ.login(newLogin, result);
         if(result.hasErrors()) {
            System.out.println(result.getAllErrors());
            return ResponseEntity.status(400).body(result.getAllErrors());
         }
-        return ResponseEntity.ok().body(newLogin);
+//        httpSession.setAttribute("user_id", loggedUser.getId());
+        
+        
+//        
+//        HttpSession s = request.getSession(); // Creates a new session if one doesn't exist
+//        s.setAttribute("user_id", loggedUser.getId());
+//        
+//        
+//        
+//        System.out.println("logged id is ====>"+(Long) s.getAttribute("user_id") );
+        return ResponseEntity.ok().body(loggedUser);
     	}
     
 //    @PostMapping("/login")
@@ -112,17 +127,33 @@ public class UserController {
 //    }
     
     @GetMapping("/logout")
-    public String logout(HttpSession s) {
+    public String logout(HttpSession session, HttpServletRequest request) {
+//    	Long userid = (Long) session.getAttribute("user_id");
+        HttpSession s = request.getSession(); // Retrieves the existing session or returns null if none exists
+
+        Long userid = (Long) s.getAttribute("user_id");
+
+
+    	System.out.println("logged out id is ====>"+ (Long) s.getAttribute("user_id"));
     	s.invalidate();
     	return "LOGGED OUT!";
+
     }
-    
+    @GetMapping("/{id}")
+ 	public ResponseEntity<User> oneUser(@PathVariable("id") Long id) {
+     	User user= userServ.findUserById(id);
+ 		 if (user != null) {
+ 	            return new ResponseEntity<>(user, HttpStatus.OK);
+ 	        } else {
+ 	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+ 	        }
+ 	}
     @GetMapping("/allusers")
     	public List<User> users(){
     	List<User> allUsers = userServ.getAll();
     	return allUsers;
     }
-    
+ 
     
 
 }
