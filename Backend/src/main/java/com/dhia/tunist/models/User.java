@@ -68,13 +68,8 @@ public class User {
     
     @OneToMany(mappedBy="loaner", fetch = FetchType.LAZY)
     private List<House> houses;
-	
-	
-	
-	
-	
-	
-	
+       	
+    private String image;
 	
 	public User() {
 	}
@@ -235,5 +230,22 @@ public class User {
 	public void setHouses(List<House> houses) {
 		this.houses = houses;
 	}
+
+
+
+	public String getImage() {
+		return image;
+	}
+
+
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+
+
+	
+	
 
 }
