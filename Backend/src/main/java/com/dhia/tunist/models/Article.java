@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,8 +30,9 @@ public class Article {
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User publisher;
+    @JoinColumn(name = "publisher")
+    @JsonBackReference
+    private User publisher;
 	
 	@NotBlank(message = "The Title is required.")
 	@Size(min = 2, message = "Please enter a valid title !")

@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -63,7 +66,9 @@ public class User {
     @OneToMany(mappedBy="author", fetch = FetchType.LAZY)
     private List<Attraction> attractions;
     
-    @OneToMany(mappedBy="publisher", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @JsonIgnore
     private List<Article> articles;
     
     @OneToMany(mappedBy="loaner", fetch = FetchType.LAZY)
