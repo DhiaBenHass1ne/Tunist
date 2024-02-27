@@ -21,6 +21,8 @@ const Attraction = () => {
         const updatedFiles = Array.from(selectedFiles);
         updatedFiles.splice(index, 1);
         setSelectedFiles(updatedFiles);
+        attraction.images.splice(index,1);
+
     };
 
     const handleImageUpload = async (file) =>{
