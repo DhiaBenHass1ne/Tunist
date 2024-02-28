@@ -20,6 +20,7 @@ function App() {
     <Route path="/type" element={ <UserType refreshPage={updateList} />}/>
     <Route path="/tours" element={<Tours  refreshPage={updateList}/>}/>
     <Route path="/attractions" element={<Attraction  refreshPage={updateList}/>}/>
+    <Route path="/article" element={<Article  refreshPage={updateList}/>}/>
     </Routes>
    
     </>

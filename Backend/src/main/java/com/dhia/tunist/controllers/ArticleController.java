@@ -1,6 +1,9 @@
 package com.dhia.tunist.controllers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dhia.tunist.models.Article;
+import com.dhia.tunist.models.User;
 import com.dhia.tunist.services.ArticleService;
 
 import jakarta.validation.Valid;
@@ -50,14 +54,29 @@ public class ArticleController {
         }
     }
     
-    @GetMapping("")
-    public ResponseEntity<List<Article>> findAllArticles() {
-        List<Article> allArticles  = articleService.allArticles();
-        
-        
-        return new ResponseEntity<>(allArticles, HttpStatus.OK);
-    }
+
     
+    @GetMapping("")
+    public List<Map<String, Object>> showAllArticles() {
+        List<Article> allArticles = articleService.allArticles(); // Assuming you have an Article class
+        List<Map<String, Object>> articleData = new ArrayList<>();
+
+        for (Article article : allArticles) {
+            Map<String, Object> articleMap = new HashMap<>();
+            articleMap.put("article", article); // Add article data
+            User publisher = article.getPublisher(); // Assuming you have a PublisherModel class
+            if (publisher != null && publisher.getId() != null) {
+                articleMap.put("publisher_id", publisher.getId()); // Add publisher ID to article map
+            } else {
+                // If no publisher is assigned, set publisher_id to null or any appropriate value
+                articleMap.put("publisher_id", null);
+            }
+
+            articleData.add(articleMap);
+        }
+
+        return articleData;
+    }
     
     @PutMapping("/edit")
     public ResponseEntity<Article> updateArticle(@RequestBody @Valid Article article){
