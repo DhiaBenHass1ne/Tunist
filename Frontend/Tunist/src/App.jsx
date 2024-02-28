@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import UserType from "./views/UserType";
 import Tours from "./views/Tours";
 import Attraction from "./views/Attraction";
+import AdminDash from "./views/AdminDash";
 import Article from "./components/Article";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
     <Route path="/tours" element={<Tours  refreshPage={updateList}/>}/>
     <Route path="/attractions" element={<Attraction  refreshPage={updateList}/>}/>
     <Route path="/article" element={<Article  refreshPage={updateList}/>}/>
+    <Route path="/admin/*" element={<AdminDash  refreshPage={updateList}/>}/>
     </Routes>
    
     </>

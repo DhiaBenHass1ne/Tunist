@@ -66,10 +66,10 @@ public class ArticleController {
             articleMap.put("article", article); // Add article data
             User publisher = article.getPublisher(); // Assuming you have a PublisherModel class
             if (publisher != null && publisher.getId() != null) {
-                articleMap.put("publisher_id", publisher.getId()); // Add publisher ID to article map
+                articleMap.put("id", publisher.getId()); // Add publisher ID to article map
             } else {
                 // If no publisher is assigned, set publisher_id to null or any appropriate value
-                articleMap.put("publisher_id", null);
+                articleMap.put("id", null);
             }
 
             articleData.add(articleMap);

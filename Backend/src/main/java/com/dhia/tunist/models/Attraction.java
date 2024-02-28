@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,6 +32,11 @@ public class Attraction {
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private Long id;
 
+		@ManyToOne(fetch = FetchType.LAZY)
+	    @JoinColumn(name = "author")
+	    @JsonBackReference
+	    private User author;
+		
 		@NotEmpty(message = "Username is required!")
 		@Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
 		private String title;
@@ -74,10 +80,10 @@ public class Attraction {
 		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		private Date updatedAt;
 		
-		@ManyToOne(fetch = FetchType.LAZY)
-	    @JoinColumn(name="user_id")
-	    private User author;
-
+	
+		
+		
+		
 		@PrePersist
 		protected void onCreate() {
 			this.createdAt = new Date();

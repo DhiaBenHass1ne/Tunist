@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import axios from 'axios';
+import Cookies from 'js-cookie'
 
 const Attraction = () => {
     const [imgStatus,setImageStatus]=useState("Empty")
     const imageList=[];
-
+    const [allAttractions, setAllAttractions] = useState([]);
     const [attraction, setAttraction] = useState({
         title:"",
         description:"",
-        images:[],
-        state:""
+        media:[],
+        state:"Bizerte",
+        author:{id:Cookies.get('user_id')}
     });
 
     const [selectedFiles, setSelectedFiles] = useState(null);
@@ -21,7 +23,7 @@ const Attraction = () => {
         const updatedFiles = Array.from(selectedFiles);
         updatedFiles.splice(index, 1);
         setSelectedFiles(updatedFiles);
-        attraction.images.splice(index,1);
+        attraction.media.splice(index,1);
 
     };
 
@@ -36,7 +38,7 @@ const Attraction = () => {
                 form
                 );
                 imageList.push(response.data.secure_url)
-                setAttraction({...attraction,images:imageList})
+                setAttraction({...attraction,media:imageList})
                 setImageStatus("Uploaded")
                 console.log("IMAGE UPLOADED")
             } catch (error) {
@@ -65,26 +67,35 @@ const Attraction = () => {
         });
 
     };
-    
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+        await  axios.post("http://localhost:8080/api/attractions",attraction)
+                    .then(res=> console.log(res.data))
+                    .catch(err=>console.log(err))
+        await axios.get("http://localhost:8080/api/attractions")
+                    .then(res=>{setAllAttractions(res.data); console.log(res.data)})
+                    .catch(err=>console.log(err))
+
+    }
 
   return (
     <div>
-      <form >
+      <form onSubmit={handleSubmit} >
 				<div className="form-group">
 					<label>Title:</label>
-					<input name="firstName" className="form-control" />
+					<input name="firstName" className="form-control" onChange={(e)=>setAttraction({...attraction,title:e.target.value})} value={attraction.title} />
 				</div>
 				<div className="form-group">
 					<label>Description:</label>
-					<input name="lastName" className="form-control" />
+					<input name="lastName" className="form-control" onChange={(e)=>setAttraction({...attraction,description:e.target.value})} value={attraction.description}/>
 				</div>
 
 
-                <div className="mb-3 btn log-btn btn-rounded">
+                {/* <div className="mb-3 btn log-btn btn-rounded">
                     <label className="form-label">Image</label>
                     { imgStatus === "Empty"?<p></p>: imgStatus ==="Uploading"? <div className="spinner-border text-light" role="status"><span className="visually-hidden">Loading...</span></div> :<img src={imageList[0]} alt="uploading" width={100} className='uploaded'/>}
                     <input type="file" name="image" onChange={handleFileChange} className="form-control"/>
-                </div>
+                </div> */}
 
                 <p>Ajoute jusqu'à 5 photos</p>
         <div className=" p-3 d-flex gap-5 imageCompo " >
