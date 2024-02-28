@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import UserType from "./views/UserType";
 import Tours from "./views/Tours";
 import Attraction from "./views/Attraction";
+import Article from "./components/Article";
 
 function App() {
   const [refresh, setRefresh] = useState(true)
@@ -19,7 +20,6 @@ function App() {
     <Route path="/type" element={ <UserType refreshPage={updateList} />}/>
     <Route path="/tours" element={<Tours  refreshPage={updateList}/>}/>
     <Route path="/attractions" element={<Attraction  refreshPage={updateList}/>}/>
-
     </Routes>
    
     </>
