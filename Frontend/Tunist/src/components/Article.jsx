@@ -5,14 +5,69 @@ import Cookies from "js-cookie";
 
 const Article = () => {
   const [articles, setArticles] = useState([]);
+   const [imgStatus,setImageStatus]=useState("Empty")
+    const imageList=[];
   const [newArticle, setNewArticle] = useState({
     title: "",
     content: "",
-    media: [],
+    media: ["test"] ,
+    publisher:{id:Cookies.get('user_id')}
   });
   const [errors, setErrors] = useState([]);
   const [publisher, setPublisher] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState(null);
+
+  const handleImageUpload = async (file) =>{
+    try {
+        const form = new FormData();
+        form.append("file", file);
+        form.append("upload_preset", "ahmedsm");
+        
+        const response = await axios.post(
+            "https://api.cloudinary.com/v1_1/dljarbi3r/image/upload",
+            form
+            );
+            imageList.push(response.data.secure_url)
+            
+            setNewArticle({...newArticle,media:imageList})
+            setImageStatus("Uploaded")
+            console.log("IMAGE UPLOADED")
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            
+            if (error.response) {
+                console.error("Response data:", error.response.data);
+                console.error("Response status:", error.response.status);
+            } else if (error.request) {
+                console.error("No response received:", error.request);
+            } else {
+                console.error("Error setting up the request:", error.message);
+            }
+        }
+}
+
+
+const handleRemoveImage = (index) => {
+  const updatedFiles = Array.from(selectedFiles);
+  updatedFiles.splice(index, 1);
+  setSelectedFiles(updatedFiles);
+  newArticle.media.splice(index,1);
+
+};
+
+
+const handleFileChange = async (e) => {
+  const files = e.target.files;
+  setSelectedFiles(files);
+  console.log("FILES =====> :", files);
+  setImageStatus("Uploading");
+
+ await Array.from(files).map((selectedFile, idx) => {
+      handleImageUpload(selectedFile);
+  });
+
+};
 
   useEffect(() => {
     axios
@@ -32,6 +87,7 @@ const Article = () => {
         console.log("--->", err);
       });
     setPublisher(Cookies.get("user_id"));
+    
 
     axios
       .get("http://localhost:8080/api/articles")
@@ -46,7 +102,7 @@ const Article = () => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:8080/api/articles/new/" + Cookies.get("user_id"),
+        "http://localhost:8080/api/articles" ,
         newArticle,
         {
           headers: {
@@ -62,8 +118,8 @@ const Article = () => {
           content: "",
           media: [],
         })
-      });
-    // .catch(err => setErrors(err.response.data.errors))
+      })
+      .catch((err) => {console.log(err) ;setErrors(err.response.data.errors)})
   };
 
   // const getOnePublisher=(publisher_id)=>{
@@ -72,7 +128,7 @@ const Article = () => {
 
   return (
     <>
-      <div>
+      {/* <div>
         <h1>Upload and Display Image usign React Hook's</h1>
 
         {selectedImage && (
@@ -98,11 +154,25 @@ const Article = () => {
             setSelectedImage(event.target.files[0]);
           }}
         />
-      </div>
-
+      </div> */}
+ <p>Ajoute jusqu'à 5 photos</p>
+        <div className=" p-3 d-flex gap-5 imageCompo " >
+            <div className="file-btn upload col-2" >
+                <input className="inputPic " type="file" multiple onChange={handleFileChange} />
+                <span className="material-symbols-rounded"><i className="bi bi-cloud-plus"></i></span> Upload File
+            </div>
+            <div className="d-flex flex-row flex-wrap gap-2">
+                {selectedFiles && Array.from(selectedFiles).map((file, idx) => (
+                    <div key={idx} className="imgsel">
+                        <img src={URL.createObjectURL(file)} className="selectedImg " alt={`preview-${idx}`} width={150}/>
+                        <button  className="x rounded-circle " type="button" onClick={() => handleRemoveImage(idx)}><i className="bi bi-trash-fill"></i></button>
+                    </div>
+                ))}
+            </div>
+        </div>
       <div>
         <h1> Create</h1>
-        {JSON.stringify(articles[0])}
+        {JSON.stringify(newArticle)}
         <form onSubmit={handleSubmit}>
           <div>
             <p> Title</p>
@@ -130,26 +200,9 @@ const Article = () => {
         }
          */}
       </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Title </th>
-            <th>Media</th>
-            <th>Content</th>
-          </tr>
-        </thead>
-        <tbody>
-          {articles.map((v, idx) => (
-            <tr key={idx}>
-              <td>{v.title}</td>
-              <td>{v.media}</td>
-              <td>{v.content}</td>
-              {/* <td>{axios.get}</td> */}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* {articles && articles[0].publisher}
+      {articles[0].publisher} */}
+    
     </>
   );
 };

@@ -76,7 +76,7 @@ public class UserController {
              return ResponseEntity.status(400).body(result.getAllErrors());
          }
          session.setAttribute("user_id", user.getId());
-         System.out.println("registred id is ====>"+(Long) session.getAttribute("user_id") );
+         System.out.println("registred id is ====>"+(Long) session.getAttribute("user_id"));
          // Return a Respons!eEntity with status 200 OK and the newly registered user
          return ResponseEntity.ok().body(newUser);
      }
@@ -148,12 +148,13 @@ public class UserController {
  	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
  	        }
  	}
-    @GetMapping("/allusers")
+    @GetMapping("")
     	public List<User> users(){
     	List<User> allUsers = userServ.getAll();
     	return allUsers;
     }
- 
+  
+
     
 
 }

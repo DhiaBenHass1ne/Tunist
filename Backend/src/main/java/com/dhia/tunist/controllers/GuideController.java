@@ -46,19 +46,18 @@ public class GuideController {
 	}
 	
     
-	@PostMapping("/{userId}") 
-	public ResponseEntity<Object>  newGuide( @PathVariable("userId") Long userId , @RequestBody @Valid Guide guide ,
+	@PostMapping("") 
+	public ResponseEntity<Object>  newGuide(   @RequestBody @Valid Guide guide ,
 			 HttpSession session ) {
 		
-		
-		System.out.println("user id is ===> "+userId);
+		Long userId = guide.getUser().getId();
 		User user= userService.findUserById(userId);
 		
 		guide.setUser(user);
 		Guide newGuide = guideService.createGuide(guide);
-//		user.setGuide(newGuide);
-//		userService.updateUser(user);
-		System.out.println("user linked to guide is ===> id : "+guide.getUser().getId()+" ==== email : "+guide.getUser().getEmail());
+		user.setGuide(newGuide);
+		userService.updateUser(user);
+//		System.out.println("user linked to guide is ===> id : "+guide.getUser().getId()+" ==== email : "+guide.getUser().getEmail());
 //		return new ResponseEntity<>(newGuide,HttpStatus.CREATED);	
         return ResponseEntity.ok().body(newGuide);
 

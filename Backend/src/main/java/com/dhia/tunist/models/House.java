@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,6 +35,7 @@ public class House {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
+	@JsonBackReference
 	private User loaner;
 	
 	@NotBlank(message = "The adress is required.")

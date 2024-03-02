@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 
 const UserType = ({ refreshPage }) => {
     const [userType, setUserType] = useState('')
-    const [logged,setLogged] = useState({})
+    const [logged,setLogged] = useState({id:Cookies.get('user_id')})
     const [guide, setGuide] = useState(
         {
             bio: '',
@@ -25,7 +25,6 @@ const UserType = ({ refreshPage }) => {
     const [tourist, setTourist] = useState(
         {
             nationality: "",
-            user:" "
         }
     )
     const ClearTouristForm = () => {
@@ -71,16 +70,17 @@ const UserType = ({ refreshPage }) => {
         // .catch(err=>{console.log(err.response.data)})
 
 
-        axios.get("http://localhost:8080/api/users/"+Cookies.get('user_id'))
-        .then(res=>{console.log("logged user ===>",res.data); setLogged(res.data)} )
-        .catch(err=>console.log(err))
+        // axios.get("http://localhost:8080/api/users/"+Cookies.get('user_id'))
+        // .then(res=>{console.log("logged user ===>",res.data); setLogged(res.data)} )
+        // .catch(err=>console.log(err))
 
         
         if(userType=="guide"){
 
-            setGuide ( {...guide,languages: Object.keys(languages).filter(key => languages[key]==true)});
+            setGuide ( {...guide,languages: Object.keys(languages).filter(key => languages[key]==true), 
+                                                    user:{id:Cookies.get('user_id')}});
             console.log(guide)
-            axios.post("http://localhost:8080/api/guides/"+Cookies.get('user_id'),guide,{
+            axios.post("http://localhost:8080/api/guides",guide,{
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -91,11 +91,13 @@ const UserType = ({ refreshPage }) => {
         }
         if(userType=="tourist"){
             setTourist({...tourist,user:logged})
-            axios.post("http://localhost:8080/api/tourists",tourist,{
+            axios.post("http://localhost:8080/api/tourists",tourist,
+                {
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }})
+                    'Content-Type': 'application/json;charset=UTF-8'
+                }}
+                )
                 .then(res=> console.log(res.data))
                 .catch(err => console.log(err))
         }

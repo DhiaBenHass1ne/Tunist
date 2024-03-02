@@ -11,7 +11,7 @@ const Attraction = () => {
         description:"",
         media:[],
         state:"Bizerte",
-        author:{id:Cookies.get('user_id')}
+        author:{id:Cookies.get('user_id')},
     });
 
     const [selectedFiles, setSelectedFiles] = useState(null);

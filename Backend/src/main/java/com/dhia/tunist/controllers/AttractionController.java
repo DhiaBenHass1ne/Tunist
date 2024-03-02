@@ -19,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dhia.tunist.models.Attraction;
+import com.dhia.tunist.models.PrivateTour;
+import com.dhia.tunist.models.PublicTour;
 import com.dhia.tunist.models.User;
 import com.dhia.tunist.services.AttractionService;
+import com.dhia.tunist.services.PrivateTourService;
+import com.dhia.tunist.services.PublicTourService;
 import com.dhia.tunist.services.UserService;
 
 import jakarta.validation.Valid;
@@ -34,23 +38,57 @@ public class AttractionController {
 	private AttractionService attractionService;
 	@Autowired
 	private UserService userService;
-	
+	@Autowired
+	private PublicTourService	publicToursService;
+	@Autowired
+	private PrivateTourService privateToursService;
 	@PostMapping("")
 	public ResponseEntity<Attraction> createAttraction(@RequestBody @Valid Attraction attraction) {
-		Attraction createdAttraction = attractionService.createAttraction(attraction);
-		User user = userService.findUserById(attraction.getAuthor().getId());
+		
+	
+			
+		User user = userService.findUserById(attraction.getAuthor().getId());		
 		attraction.setAuthor(user);
+		
+	
+		
+		Attraction createdAttraction = attractionService.createAttraction(attraction);
 		return new ResponseEntity<>(createdAttraction, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Attraction> findAttractionById(@PathVariable Long id) {
+	public ResponseEntity<Map<String, Object>> findAttractionById(@PathVariable Long id) {
 		Attraction foundAttraction = attractionService.findAttractionById(id);
-
 		if (foundAttraction != null) {
-			return new ResponseEntity<>(foundAttraction, HttpStatus.OK);
-		} else {
+			Map<String, Object> attractionMap = new HashMap<>();
+			attractionMap.put("id", foundAttraction.getId());
+			List<Map<String,String>> newMedia = new ArrayList<>();
+			List<String> media= foundAttraction.getMedia();
+			for (String image : media) {
+				Map<String, String> map = new HashMap<>();
+				map.put("url", image);
+				newMedia.add(map) ;
+			 }
+			attractionMap.put("media",newMedia);
+
+			attractionMap.put("attraction", foundAttraction); // Add article data
+			User author = foundAttraction.getAuthor(); // Assuming you have a PublisherModel class
+			if (author != null && author.getId() != null) {
+				Map<String, Object> userMap = new HashMap<>();
+
+				userMap.put("id", author.getId()); // Add publisher ID to article map
+				userMap.put("firstName", author.getFirstName());
+				userMap.put("lastName", author.getLastName());
+				userMap.put("image", author.getImage());
+				attractionMap.put("author",userMap );
+			} 
+			return new ResponseEntity<>(attractionMap, HttpStatus.OK);
+
+		} 
+
+		else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
 		}
 	}
 
@@ -67,11 +105,14 @@ public class AttractionController {
             attractionMap.put("attraction", attraction); // Add article data
             User author = attraction.getAuthor(); // Assuming you have a PublisherModel class
             if (author != null && author.getId() != null) {
-            	attractionMap.put("id", author.getId()); // Add publisher ID to article map
-            } else {
-                // If no publisher is assigned, set publisher_id to null or any appropriate value
-            	attractionMap.put("id", null);
-            }
+            	Map<String, Object> userMap = new HashMap<>();
+
+				userMap.put("id", author.getId()); // Add publisher ID to article map
+				userMap.put("firstName", author.getFirstName());
+				userMap.put("lastName", author.getLastName());
+				userMap.put("image", author.getImage());
+				attractionMap.put("author",userMap );
+            } 
 
             attractionData.add(attractionMap);
         }
@@ -82,7 +123,7 @@ public class AttractionController {
 		return new ResponseEntity<>(attractionData, HttpStatus.OK);
 	}
 
-	@PatchMapping("/edit")
+	@PatchMapping("/{id}")
 	public ResponseEntity<Attraction> updateArticle(@RequestBody @Valid Attraction attraction) {
 
 		Attraction updatedAttraction = attractionService.updateAttraction(attraction);

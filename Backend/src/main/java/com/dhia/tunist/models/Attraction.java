@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,16 +53,18 @@ public class Attraction {
 		
 		@ManyToMany
 	    @JoinTable(
-	        name = "attraction_tour",
+	        name = "private_attraction_tour",
 	        joinColumns = @JoinColumn(name = "tour_id"),
 	        inverseJoinColumns = @JoinColumn(name = "attraction_id"))
+		
 	    private List<PrivateTour> privateTours;
 		
 		@ManyToMany
 	    @JoinTable(
-	        name = "attraction_tour",
+	        name = "public_attraction_tour",
 	        joinColumns = @JoinColumn(name = "tour_id"),
 	        inverseJoinColumns = @JoinColumn(name = "attraction_id"))
+		
 	    private List<PublicTour> publicTours;
 
 

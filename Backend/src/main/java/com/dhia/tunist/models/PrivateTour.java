@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,13 +37,16 @@ public class PrivateTour {
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "guide_id")
+	@JsonBackReference(value="private-guide-tour")
 	private Guide privateGuide;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tourist_id")
+	@JsonBackReference(value="private-tourist-tour")
 	private Tourist privateTourist;
 	
 	 @ManyToMany(mappedBy = "privateTours")
+	 
 	 private List<Attraction> privateAttractions;
 
 	

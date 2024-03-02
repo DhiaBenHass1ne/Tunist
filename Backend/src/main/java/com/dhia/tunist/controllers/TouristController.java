@@ -1,6 +1,8 @@
 package com.dhia.tunist.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,22 +46,44 @@ public class TouristController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Tourist> getOne(@PathVariable("id")Long id) {
+	public ResponseEntity<Map<String, Object>> getOne(@PathVariable("id")Long id) {
 		Tourist tourist = touristService.findTouristById(id);
-		
-		return new ResponseEntity<>(tourist,HttpStatus.OK);
-	}
+		if(tourist!=null) {
+			Map<String, Object> touristMap = new HashMap<>();
+			touristMap.put("id", tourist.getId()); 
+			
+			touristMap.put("privateTours", tourist.getPrivateTour());
+			touristMap.put("publicTours", tourist.getPublicTour());
+			touristMap.put("nationality", tourist.getNationality());
+			if(tourist.getUser() !=null) {	
+				System.out.println("tourist's user id ====>"+tourist.getUser().getId());
+			Map<String, Object> userMap = new HashMap<>();
+			userMap.put("firstName", tourist.getUser().getFirstName());
+			userMap.put("lastName", tourist.getUser().getLastName());
+			userMap.put("image", tourist.getUser().getImage());
+			userMap.put("attraction", tourist.getUser().getAttractions());
+			userMap.put("houses", tourist.getUser().getHouses());
+			touristMap.put("user", userMap);}
+			
+			return new ResponseEntity<>(touristMap, HttpStatus.OK);
+
+			}
+			  else {
+		            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		         		}
+
+		}
 	
-	@PostMapping("")
+	
+	@PostMapping(path="", consumes = "application/json;charset=UTF-8")
 	public ResponseEntity<Tourist> createTourist(@RequestBody @Valid Tourist tourist , HttpSession s,BindingResult result) {
-//		Long user_id= (Long) s.getAttribute("user_id");
-//		User user = userService.findUserById(userId);
 //		tourist.setUser(user);
 		User user = userService.findUserById(tourist.getUser().getId());
 		  tourist.setUser(user);
 		Tourist newTourist = touristService.createTourist(tourist);
-//		user.setTourist(newTourist);
-//		userService.updateUser(user);
+		user.setTourist(newTourist);
+		userService.updateUser(user);
+
 		
 		return new ResponseEntity<>(newTourist,HttpStatus.CREATED);
 		

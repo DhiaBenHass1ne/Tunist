@@ -6,6 +6,10 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,10 +53,14 @@ public class Guide {
     @DecimalMin(value = "0.0", inclusive = false, message="Price must be greater than zero!")
     private BigDecimal price;
 	
-	@OneToMany(mappedBy="privateGuide", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="privateGuide", fetch = FetchType.EAGER)
+	@JsonManagedReference(value="private-guide-tour")
+	@JsonIgnore
     private List<PrivateTour> privateTour;
 	
-	@OneToMany(mappedBy="publicGuide", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="publicGuide", fetch = FetchType.EAGER )
+	@JsonManagedReference(value="public-guide-tour")
+    @JsonIgnore
     private List<PublicTour> publicTour;
 	
     @Column(columnDefinition = "boolean default true")
@@ -65,8 +73,9 @@ public class Guide {
 
 
 
-	@OneToOne(mappedBy = "guide",cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "guide")
 	@JoinColumn(name="user_id")
+    @JsonBackReference(value="user-guide")
     private User user;
     
 	@Column(updatable = false)

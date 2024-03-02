@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -58,20 +59,27 @@ public class User {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="tourist_id")
+	@JsonManagedReference(value="user-tourist")
 	private Tourist tourist;
 	
 	@OneToOne(cascade = CascadeType.ALL)
+	@JsonManagedReference(value="user-guide")
 	private Guide guide;
 	
     @OneToMany(mappedBy="author", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @JsonIgnore
     private List<Attraction> attractions;
     
-    @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "publisher", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonIgnore
     private List<Article> articles;
     
     @OneToMany(mappedBy="loaner", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @JsonIgnore
     private List<House> houses;
        	
     private String image;

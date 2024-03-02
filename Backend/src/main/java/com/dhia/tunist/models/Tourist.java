@@ -5,6 +5,10 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,15 +31,20 @@ public class Tourist {
 	
 
     @OneToOne(mappedBy = "tourist")
+    @JsonBackReference(value="user-tourist")
     private User user;
     
 	@NotEmpty(message = "Nationality is required!")
 	private String nationality;
 	
-	@OneToMany(mappedBy="privateTourist", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="privateTourist", fetch = FetchType.EAGER)
+	@JsonManagedReference(value="private-tourist-tour")
+	@JsonIgnore
     private List<PrivateTour> privateTour;
     
-	@OneToMany(mappedBy="publicTourist", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="publicTourist", fetch = FetchType.EAGER)
+	@JsonManagedReference(value="public-tourist-tour")
+	@JsonIgnore
     private List<PublicTour> publicTour;
     
 
