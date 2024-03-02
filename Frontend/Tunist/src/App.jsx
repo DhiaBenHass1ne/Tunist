@@ -4,9 +4,10 @@ import LogReg from "./views/LogReg";
 import { Route, Routes } from "react-router-dom";
 import UserType from "./views/UserType";
 import Tours from "./views/Tours";
-import Attraction from "./views/Attraction";
 import AdminDash from "./views/AdminDash";
-import Article from "./components/Article";
+import NavBar from "./components/NavBar";
+import LandingPage from "./views/LandingPage";
+import Blog from "./views/Blog";
 
 function App() {
   const [refresh, setRefresh] = useState(true)
@@ -16,13 +17,15 @@ function App() {
   }
   return (
     <>
+    {/* <NavBar/> */}
     <Routes>
+    
+    <Route path="/home" element={<LandingPage refreshPage={updateList} />} />
     <Route path="/logreg" element={<LogReg refreshPage={updateList} />} />
     <Route path="/type" element={ <UserType refreshPage={updateList} />}/>
     <Route path="/tours" element={<Tours  refreshPage={updateList}/>}/>
-    <Route path="/attractions" element={<Attraction  refreshPage={updateList}/>}/>
-    <Route path="/article" element={<Article  refreshPage={updateList}/>}/>
     <Route path="/admin/*" element={<AdminDash  refreshPage={updateList}/>}/>
+    <Route path="/blog" element={<Blog  refreshPage={updateList}/>}/>
     </Routes>
    
     </>

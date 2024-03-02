@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import axios from "axios";
 import Cookies from "js-cookie";
+import Arrow from "./Arrow";
+import MyModal from "./Modal"
 
 const Article = () => {
   const [articles, setArticles] = useState([]);
@@ -10,11 +12,15 @@ const Article = () => {
   const [newArticle, setNewArticle] = useState({
     title: "",
     content: "",
+<<<<<<< HEAD
+    media: [],
+=======
     media: ["test"] ,
+>>>>>>> cc8107af94a2d883e29eb6d8e928eab299870c98
     publisher:{id:Cookies.get('user_id')}
   });
   const [errors, setErrors] = useState([]);
-  const [publisher, setPublisher] = useState(null);
+  const [publisherNames, setPublisherNames] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState(null);
 
@@ -79,27 +85,46 @@ const handleFileChange = async (e) => {
       })
       .then((res) => {
         console.log("===>", res);
-        setPublisher(res.data);
       })
       .catch((err) => {
         setErrors(err);
-
         console.log("--->", err);
       });
+<<<<<<< HEAD
+=======
     setPublisher(Cookies.get("user_id"));
     
+>>>>>>> cc8107af94a2d883e29eb6d8e928eab299870c98
 
     axios
       .get("http://localhost:8080/api/articles")
       .then((res) => {
         setArticles(res.data);
         console.log(res.data);
+        // Fetch publisher names for all articles
+        const promises = res.data.map((article) => getOnePublisher(article.id));
+        Promise.all(promises).then((names) => setPublisherNames(names));
       })
       .catch((err) => console.log(err));
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
+    await axios.post("http://localhost:8080/api/articles", newArticle)
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err));
+    await axios.get("http://localhost:8080/api/articles")
+      .then(res => {
+        setArticles(res.data);
+        console.log(res.data);
+        // Fetch publisher names for all articles
+        const promises = res.data.map((article) => getOnePublisher(article.id));
+        Promise.all(promises).then((names) => setPublisherNames(names));
+      })
+      .catch(err => console.log(err));
+  }
+=======
     axios
       .post(
         "http://localhost:8080/api/articles" ,
@@ -121,15 +146,18 @@ const handleFileChange = async (e) => {
       })
       .catch((err) => {console.log(err) ;setErrors(err.response.data.errors)})
   };
+>>>>>>> cc8107af94a2d883e29eb6d8e928eab299870c98
 
-  // const getOnePublisher=(publisher_id)=>{
-  //   axios.get("http://localhost:8080/api/users/"+publisher_id)
-  // }
+  const getOnePublisher = async (publisher_id) => {
+    const response = await axios.get("http://localhost:8080/api/users/" + publisher_id);
+    return response.data.firstName;
+  }
 
   return (
     <>
       {/* <div>
         <h1>Upload and Display Image usign React Hook's</h1>
+        <MyModal></MyModal>
 
         {selectedImage && (
           <div>
@@ -200,9 +228,34 @@ const handleFileChange = async (e) => {
         }
          */}
       </div>
+<<<<<<< HEAD
+
+      <table>
+        <thead>
+          <tr>
+            <th>Title </th>
+            <th>Media</th>
+            <th>Content</th>
+            <th>Publisher</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          {articles.map((v, idx) => (
+            <tr key={idx}>
+              <td>{v.article.title}</td>
+              <td>{v.article.media}</td>
+              <td>{v.article.content}</td>
+              <td>{publisherNames[idx]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+=======
       {/* {articles && articles[0].publisher}
       {articles[0].publisher} */}
     
+>>>>>>> cc8107af94a2d883e29eb6d8e928eab299870c98
     </>
   );
 };
