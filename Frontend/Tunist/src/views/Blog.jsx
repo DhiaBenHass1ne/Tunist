@@ -4,41 +4,44 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "../components/NavBar";
 import blogStyle from "./blog.module.css";
 import Arrow from "../components/Arrow";
-import Modal from "../components/Modal"
+import Modal from "../components/Modal";
+import axios from "axios";
+import moment from "moment";
+import Cookies from "js-cookie";
+
 
 const Blog = () => {
-  const carouselImagesPerArticle = [
-    [
-      "https://c4.wallpaperflare.com/wallpaper/868/182/441/desert-sand-dune-sky-sahara-wallpaper-preview.jpg", // Replace with your image URLs
-      "https://c4.wallpaperflare.com/wallpaper/100/297/74/desert-sand-tourism-camels-wallpaper-preview.jpg",
-    ],
-    [
-      "https://c1.wallpaperflare.com/preview/501/915/801/tunisia-monastir-holiday-relaxation.jpg",
-      "https://c1.wallpaperflare.com/preview/910/959/806/sea-holiday-water-headland.jpg",
-    ],
-    // Add more arrays as needed
-  ];
 
-  const articles = [
-    {
-      id: 1,
-      title: "The Desert In Tunisia",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit...Lorem ipsum dolor sit amet, consectetur adipiscing elit... ",
-      author: "John Doe",
-      publicationDate: "2022-05-15",
-    },
-    {
-      id: 2,
-      title: "Join Us to go to the beach",
-      content:
-        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
-      author: "Jane Smith",
-      publicationDate: "2022-06-20",
-    },
-    // Add more articles as needed
-  ];
+  const [articles, setArticles] = useState([]);
+  const [carouselImagesPerArticle, setCarouselImagesPerArticle] = useState([]);
+  const [modal, setModal] = useState(false);
 
 
+  useEffect(() => {
+    // console.log(Cookies.get("user_id"));
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/articles");
+        setArticles(response.data);
+
+        const extractedMedia = response.data.map((article) =>
+          article.media.map((mediaItem) => mediaItem.url)
+        );
+
+        setCarouselImagesPerArticle(extractedMedia);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+  const toggleModal = () => {
+    setModal(!modal);
+  };
 
 
 
@@ -47,9 +50,9 @@ const Blog = () => {
     <>
       <NavBar></NavBar>
       <div style={{ padding: "5rem" }}>
-        {articles.map((article, index) => (
+        {articles.map((a, index) => (
             index%2==0 ? 
-          <Row key={article.id} style={{ marginBottom: "40px" }}>
+          <Row key={a.id} style={{ marginBottom: "40px" }}>
             <Col sm={2} md={6}>
               <Carousel>
                 {carouselImagesPerArticle[index].map((image, i) => (
@@ -71,43 +74,53 @@ const Blog = () => {
             </Col>
             <Col sm={12} md={6}>
               <div style={{ padding: "20px", backgroundColor: "#EfE8DB", height: "25rem", borderRadius: "15px", boxShadow: "4px 4px 4px #930412", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <div className="d-flex align-items-center gap-5 mb-5">
+                <div className=" d-flex align-items-center justify-content-evenly mb-1 ">
 
                   <img
                     className={blogStyle.cardThumb}
                     src="https://i.imgur.com/7D7I6dI.png"
                     alt=""
                   />
-                  <h2>{article.title}</h2>
+                  <h2>{a.article.title}</h2>
+                  {Cookies.get("user_id")==a.publisher.id && <div style={{cursor:"pointer"}} onClick={toggleModal}> 
+                  <i className="bi bi-pencil-square" ></i>
+
+                  </div> }
+                 
                 </div>
-                <p>{article.content}</p>
+                <p>{a.article.content}</p>
                 <div className="d-flex justify-content-between">
-                  <h3>{article.author}</h3>
+                  <h3>{a.publisher.firstName}</h3>
                   <p>
-                    <small>{article.publicationDate}</small> 
-                  </p>
+              <small>{moment(a.article.createdAt).fromNow()}</small>
+            </p>
                 </div>
               </div>
             </Col>
           </Row>
-        : <Row key={article.id} style={{ marginBottom: "40px" }}>
+        : <Row key={a.id} style={{ marginBottom: "40px" }}>
             <Col sm={12} md={6}>
               <div style={{ padding: "20px", backgroundColor: "#EfE8DB", height: "25rem", borderRadius: "15px", boxShadow: "4px 4px 4px #930412", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <div className="d-flex align-items-center gap-5 mb-5">
+                <div className=" d-flex align-items-center justify-content-evenly mb-1 ">
 
                   <img
                     className={blogStyle.cardThumb}
                     src="https://i.imgur.com/7D7I6dI.png"
                     alt=""
                   />
-                  <h2>{article.title} </h2>
+                  <h2>{a.article.title}</h2>
+                  {Cookies.get("user_id")==a.publisher.id && <div style={{cursor:"pointer"}} onClick={toggleModal}> 
+                  <i className="bi bi-pencil-square" ></i>
+
+                  </div> }
+                 
                 </div>
-                <p>{article.content}</p>
+                <p>{a.article.content}</p>
                 <div className="d-flex justify-content-between">
-                  <h3>{article.author}</h3>
+                  <h3>{a.publisher.firstName}</h3>
                   <p>
-                    <small>{article.publicationDate}</small> 
-                  </p>
+              <small>{moment(a.article.createdAt).fromNow()}</small>
+            </p>
                 </div>
               </div>
             </Col>
@@ -134,7 +147,7 @@ const Blog = () => {
         </Row> ))}
        
       </div>
-        <Modal ></Modal>
+        <Modal modal={modal} setModal={setModal} ></Modal>
        
     </>
   );

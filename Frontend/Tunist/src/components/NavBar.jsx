@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import buttonn from "./button.module.css"
+import Cookies from 'js-cookie';
+import axios from "axios";
+import { Link, useNavigate } from 'react-router-dom';
+
 
 const NavBar = () => {
+
+  const navigate=useNavigate();
 
 
     
@@ -66,6 +72,10 @@ const styles = {
 
   const [rotation, setRotation] = useState(0);
 
+  const logout=()=>{
+    axios.get("http://localhost:8080/api/users/logout").then(res=>{console.log(res);Cookies.remove("user_id");navigate("/home")}).catch(err=>console.log(err))
+  }
+
 
   return (
 
@@ -76,19 +86,22 @@ const styles = {
         {/* <button style={styles.button}>Button</button> */}
       </div>
       <div style={styles.middle}>
-        <img src="/tunisit-logo.png" alt="Logo" style={styles.logo} />
+        <Link to='/home'><img src="/tunisit-logo.png" alt="Logo" style={styles.logo} /></Link>
       </div>
+      {Cookies.get("user_id") ? <div style={styles.right}>        <button  className={buttonn.button17} onClick={logout}>Logout</button>
+</div> :
       <div style={styles.right}>
-        <button  className={buttonn.button17}>Register</button>
-        <button className={buttonn.button17}>Login</button>
+        <Link to="/logreg" className={buttonn.button17}> Register</Link>  
+        <Link to="/logreg" className={buttonn.button17}> Login</Link>  
       </div>
+      }
     </nav>
     {showOverlay && (
         <div style={styles.overlay} onClick={toggleOverlay}>
          <i className="bi bi-x-square" style={{color:"white",top:'1rem', fontSize:"2rem", position: "absolute",right:"1rem",cursor:'pointer'}}></i>
          <div style={{position:'absolute',top:'1rem'}}>
          <button className={buttonn.button17}>Attractions</button>
-         <button className={buttonn.button17}>Blog</button>
+         <Link to="/blog" className={buttonn.button17}> Blog</Link> 
          <button className={buttonn.button17}>Guides</button>
          <button className={buttonn.button17}>Houses</button>
 

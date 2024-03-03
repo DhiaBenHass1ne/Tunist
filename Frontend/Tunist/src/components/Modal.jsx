@@ -4,8 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import inputStyle from "./input.module.css"
 
-export default function Modal() {
-  const [modal, setModal] = useState(false);
+export default function Modal({modal,setModal}) {
   const [imgStatus,setImageStatus]=useState("Empty")
 
   const imageList=[];
@@ -21,6 +20,9 @@ export default function Modal() {
   const [errors, setErrors] = useState([]);
   const [publisherNames, setPublisherNames] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+
+
+ 
 
   const handleImageUpload = async (file) =>{
     try {
@@ -62,6 +64,8 @@ const handleFileChange = async (e) => {
     });
 
 };
+
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
