@@ -1,6 +1,9 @@
 package com.dhia.tunist.controllers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dhia.tunist.models.Guide;
+import com.dhia.tunist.models.Article;
+import com.dhia.tunist.models.Attraction;
 import com.dhia.tunist.models.LoginUser;
+import com.dhia.tunist.models.Tourist;
 import com.dhia.tunist.models.User;
 import com.dhia.tunist.services.UserService;
 
@@ -140,20 +145,55 @@ public class UserController {
 
     }
     @GetMapping("/{id}")
- 	public ResponseEntity<User> oneUser(@PathVariable("id") Long id) {
+ 	public Map<String, Object> oneUser(@PathVariable("id") Long id) {
      	User user= userServ.findUserById(id);
- 		 if (user != null) {
- 	            return new ResponseEntity<>(user, HttpStatus.OK);
- 	        } else {
- 	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
- 	        }
+		Map<String, Object> userMap = new HashMap<>();
+		userMap.put("id", user.getId()); // Add article data
+		userMap.put("user", user); // Add article data
+		List<Article> articles = user.getArticles(); // Assuming you have a PublisherModel class
+		if (articles.isEmpty()==false) {
+			userMap.put("articles",articles);
+		}
+		List<Attraction> attracrions = user.getAttractions();
+		if(attracrions.isEmpty()==false) {
+			userMap.put("attractions", attracrions);
+		}
+		Tourist tourist = user.getTourist();
+		if(tourist!= null) {
+			userMap.put("guide", tourist);
+		}
+		return userMap;
  	}
-    @GetMapping("")
-    	public List<User> users(){
-    	List<User> allUsers = userServ.getAll();
-    	return allUsers;
-    }
-  
+    
+	@GetMapping("")
+	public List<Map<String, Object>> showAllArticles() {
+		List<User> allUsers = userServ.getAll(); // Assuming you have an Article class
+		List<Map<String, Object>> userData = new ArrayList<>();
+
+		for (User user : allUsers) {
+			Map<String, Object> userMap = new HashMap<>();
+			userMap.put("id", user.getId()); // Add article data
+			userMap.put("user", user); // Add article data
+			List<Article> articles = user.getArticles(); // Assuming you have a PublisherModel class
+			if (articles.isEmpty()==false) {
+				userMap.put("articles",articles);
+			}
+			List<Attraction> attracrions = user.getAttractions();
+			if(attracrions.isEmpty()==false) {
+				userMap.put("attractions", attracrions);
+			}
+			Tourist tourist = user.getTourist();
+			if(tourist!= null) {
+				userMap.put("guide", tourist);
+			}
+			
+//			
+			userData.add(userMap);
+		}
+
+		return userData;
+	}
+
 
     
 
