@@ -19,7 +19,7 @@
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-template-rows: repeat(auto-fit, 30rem); /* Adjust the row height as needed */
   gap: 6rem;
-  margin: auto 4rem;
+  margin: auto 0rem;
   padding: 3rem;
   list-style-type: none;
   }
