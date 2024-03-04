@@ -15,16 +15,42 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import moment from "moment";
 import { Carousel, Col, Row } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
   const [articles, setArticles] = useState([]);
   const [carouselImagesPerArticle, setCarouselImagesPerArticle] = useState([]);
+  const {user_id} = useParams();
+  const [user,setUser] = useState({})
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:8080/api/users/"+Cookies.get("user_id"));
+  //       setArticles(response.data.articles);
+
+  //       const extractedMedia = response.data.articles.map((article) =>
+  //         article.media.map((mediaItem) => mediaItem)
+  //       );
+
+  //       setCarouselImagesPerArticle(extractedMedia);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
+    console.log(user_id);
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/users/"+Cookies.get("user_id"));
+        const response = await axios.get("http://localhost:8080/api/users/"+user_id);
         setArticles(response.data.articles);
+        console.log(response);
+        setUser(response.data.user)
 
         const extractedMedia = response.data.articles.map((article) =>
           article.media.map((mediaItem) => mediaItem)
@@ -51,11 +77,13 @@ const Profile = () => {
               src="https://i.imgur.com/7D7I6dI.png"
               alt="avatar"
               className="rounded-circle"
-              style={{ width: '150px' }}
+              style={{ width: '150px',border:"2px solid black" }}
               fluid
             />
-            <h3 className="text-muted mb-5 mt-3">Dhaieddine Amri</h3>
-            <p className="text-muted mb-5">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam nemo praesentium totam, recusandae corporis pariatur? Minima, porro voluptatem fugiat quia alias aliquam unde harum natus, temporibus consequatur minus sed magnam?</p>
+            <h3 className="text-muted mb-5 mt-3">{user.firstName}</h3>
+            <p className="text-muted mb-5">Lorem ipsum dolor sit amet consectetur 
+            adipisicing elit. Natus provident dolor voluptatum corporis unde nesciunt,
+             assumenda id sapiente voluptatibus veritatis adipisci quos atque. Consequuntur aperiam temporibus in hic, fuga alias?</p>
                 <p className="text-muted mb-4">Bay Area, San Francisco, CA</p>
                 <div className="d-flex justify-content-center mb-2">
                
@@ -68,6 +96,7 @@ const Profile = () => {
         <MDBCard className="mb-4 p-2" style={{height:"73vh",width:"28%",display:"flex"}}>
           {/* Articles Section */}
           <h1  className="text-muted" style={{textAlign:"center",marginBottom:"2rem"}}>Articles</h1>
+          <hr />
           {articles.map((a, index) => (
             <Row className="justify-content-evenly" key={a.id} style={{ marginBottom: "40px" }}>
               <Col sm={2} md={5}>
@@ -117,9 +146,10 @@ const Profile = () => {
 
         {/* replace this with Attraction */}
 
+
         <MDBCard className="mb-4 p-2" style={{height:"73vh",width:"28%",display:"flex"}}>
         <h1 className="text-muted" style={{textAlign:"center",marginBottom:"2rem"}}>Attractions</h1>
-
+        <hr />
           {/* Articles Section */}
           {articles.map((a, index) => (
             <Row className="justify-content-around" key={a.id} style={{ marginBottom: "40px" }}>

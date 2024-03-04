@@ -1,11 +1,14 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import UserService from '../services/UserService'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import "./Reg.css"
 
 const Reg = ({ refreshPage }) => {
     const [userId, setUserId] = useState('');
+    const hiddenFileInput = useRef(null);
+
 
     useEffect(() => {
 
@@ -14,6 +17,10 @@ const Reg = ({ refreshPage }) => {
             setUserId(userIdFromCookie);
         }
     }, []);
+
+    const handleClick = (event) => {
+        hiddenFileInput.current.click();
+      };
 
     const [newUser, setNewUser] = useState({
         firstName: '',
@@ -84,50 +91,53 @@ const Reg = ({ refreshPage }) => {
             });
     }
 
-    const test = ()=>{
-        UserService.test()
-        .then(res =>{console.log(Cookies.get('user_id')); console.log(res)})
-        .catch(err=>console.log(err))
-    }
-
     return (
-        <div className="container d-flex justify-content-around">
+        <div className="container d-flex justify-content-center">
 		<div>
-			<h3>Register:</h3>
-            {JSON.stringify(newUser)}
-            <h3 className='text-danger'>{Cookies.get('user_id')}</h3>
-			<form onSubmit={handleSubmit}>
+            <div className=' p-3  text-center'>
+			<h3>Join us ❤</h3>
+            <p className=' text-secondary'>Wether you&apos;re a tourist visiting our country or  a tunisian looking to make someone&apos;s trip unforgettable</p>
+            </div>
+
+			<form className='' onSubmit={handleSubmit}>
+                <div className="mb-3 text-center" >
+                    { imgStatus === "Empty"?
+                        <img className='iconColor' src="./camera.svg" alt="Upload" height={75} onClick={handleClick} style={{cursor: "pointer" }}/>: 
+                        imgStatus ==="Uploading"?
+                        <div className="spinner-border iconColor fs-5" role="status"><span className="visually-hidden">Loading...</span></div> 
+                        :<div className='uploaded'><img src={newUser.image} alt="uploading" width={75} className='uploaded'/></div>}
+                    <input type="file" name="image" onChange={handleFileChange} ref={hiddenFileInput} style={{ display: "none" }} className="form-control"/>
+                </div>
+
 				<div className="form-group">
 					<label>First Name:</label>
 					<input name="firstName" className="form-control" onChange={(e)=>{setNewUser({...newUser,firstName:e.target.value})}} value={newUser.firstName}/>
 				</div>
+
 				<div className="form-group">
 					<label>Last Name:</label>
 					<input name="lastName" className="form-control" onChange={(e)=>{setNewUser({...newUser,lastName:e.target.value})}} value={newUser.lastName}/>
 				</div>
+
 				<div className="form-group">
 					<label>Email:</label>
 					<input name="email" className="form-control" onChange={(e)=>{setNewUser({...newUser,email:e.target.value})}} value={newUser.email}/>
 				</div>
+
 				<div className="form-group">
 					<label>Password:</label>
 					<input type='password' name="password" className="form-control" onChange={(e)=>{setNewUser({...newUser,password:e.target.value})}} value={newUser.password}/>
 					
 				</div>
+
 				<div className="form-group">
 					<label>Confirm Password:</label>
 					<input type='password' name="confirm" className="form-control" onChange={(e)=>{setNewUser({...newUser,confirm:e.target.value})}}/>
-				
 				</div>
-
-                <div className="mb-3 btn log-btn btn-rounded">
-                    <label className="form-label">Profile Picture</label>
-                    { imgStatus === "Empty"?<p></p>: imgStatus ==="Uploading"? <div className="spinner-border text-light" role="status"><span className="visually-hidden">Loading...</span></div> :<img src={newUser.image} alt="uploading" width={100} className='uploaded'/>}
-                    <input type="file" name="image" onChange={handleFileChange} className="form-control"/>
+                <div className='text-center'>
+				<input type="submit" value="Register" className="button17" />
                 </div>
-				<input type="submit" value="Register" className="btn btn-primary" />
 			</form>
-            <button onClick={()=>{test()}}>TEST</button>
 		</div>
     </div>
     )

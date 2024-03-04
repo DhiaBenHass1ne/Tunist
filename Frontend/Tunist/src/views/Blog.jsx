@@ -8,6 +8,7 @@ import Modal from "../components/Modal";
 import axios from "axios";
 import moment from "moment";
 import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
 
 const Blog = () => {
   const [articles, setArticles] = useState([]);
@@ -96,11 +97,11 @@ const Blog = () => {
                         src="https://i.imgur.com/7D7I6dI.png"
                         alt=""
                       />
-
-                      <h2>
+                      {/* {JSON.stringify(a.publisher.id)} */}
+                      <Link to={`/profile/${a.publisher.id}`} ><h2>
                         {a.publisher.firstName.charAt(0).toUpperCase() +
                           a.publisher.firstName.slice(1)}
-                      </h2>
+                      </h2></Link>
                     </div>
 
                     <p>

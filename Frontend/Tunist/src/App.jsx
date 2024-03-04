@@ -9,6 +9,8 @@ import NavBar from "./components/NavBar";
 import LandingPage from "./views/LandingPage";
 import Blog from "./views/Blog";
 import Profile from "./views/Profile";
+import SignUp from "./views/SignUp";
+import Carousel from "./components/Signup/Carousel";
 
 function App() {
   const [refresh, setRefresh] = useState(true)
@@ -27,7 +29,9 @@ function App() {
     <Route path="/tours" element={<Tours  refreshPage={updateList}/>}/>
     <Route path="/admin/*" element={<AdminDash  refreshPage={updateList}/>}/>
     <Route path="/blog" element={<Blog  refreshPage={updateList}/>}/>
-    <Route path="/profile" element={<Profile  refreshPage={updateList}/>}/>
+    <Route path="/profile/:user_id" element={<Profile  refreshPage={updateList}/>}/>
+    <Route path="/signup" element={<SignUp refreshPage={updateList}/>}/>
+    <Route path="/carousel" element={<Carousel/>}/>
     </Routes>
    
     </>

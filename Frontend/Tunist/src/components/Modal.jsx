@@ -112,8 +112,8 @@ const handleFileChange = async (e) => {
       position: "fixed",
       right: "3em",
       bottom: "3em",
-      width: "70px",
-      height: "70px",
+      width: "3rem",
+      height: "3rem",
       backgroundColor: "#930412",
       borderRadius: "50%",
       cursor: "pointer",
@@ -194,7 +194,7 @@ const handleFileChange = async (e) => {
         className="d-flex justify-content-center align-items-center"
         onClick={toggleModal}
       >
-        <i className="bi bi-plus-square" style={{ fontSize: "2rem" }}></i>
+        <i className="bi bi-plus-square" style={{ fontSize: "1rem" }}></i>
       </div>
     </>
   );
