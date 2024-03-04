@@ -9,9 +9,10 @@ import axios from "axios";
 import moment from "moment";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
+import AttractionModal from "../components/AttractionModal";
 
-const Blog = () => {
-  const [articles, setArticles] = useState([]);
+const Attractions = () => {
+  const [attractions, setAttractions] = useState([]);
   const [carouselImagesPerArticle, setCarouselImagesPerArticle] = useState([]);
   const [modal, setModal] = useState(false);
 
@@ -19,13 +20,15 @@ const Blog = () => {
     // console.log(Cookies.get("user_id"));
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/articles");
-        setArticles(response.data);
+        const response = await axios.get("http://localhost:8080/api/attractions");
+        setAttractions(response.data);
 
-        const extractedMedia = response.data.map((article) =>
-          article.media.map((mediaItem) => mediaItem.url)
-        );
-
+        console.log(response.data);
+         const extractedMedia = response.data.map((data) =>
+        data.attraction.media.map((mediaItem) => mediaItem)
+      );
+      
+        
         setCarouselImagesPerArticle(extractedMedia);
         console.log(response.data);
       } catch (error) {
@@ -59,7 +62,7 @@ const Blog = () => {
       <NavBar></NavBar>
       <hr></hr>
       <div style={{ padding: "5rem" }}>
-        {articles.map((a, index) =>
+        {attractions.map((a, index) =>
           index % 2 == 0 ? (
             <Row key={a.id} style={{ marginBottom: "40px" }}>
               <Col sm={2} md={6}>
@@ -95,8 +98,8 @@ const Blog = () => {
                   }}
                 >
                   <div className=" d-flex align-items-center justify-content-evenly mb-1 ">
-                    <h1 style={robotoSlabStyles}>{a.article.title}</h1>
-                    {Cookies.get("user_id") == a.publisher.id && (
+                    <h1 style={robotoSlabStyles}>{a.attraction.title}</h1>
+                    {Cookies.get("user_id") == a.author.id && (
                       <div style={{ cursor: "pointer" }} onClick={toggleModal}>
                         <i className="bi bi-pencil-square"></i>
                       </div>
@@ -111,13 +114,13 @@ const Blog = () => {
                       fontStyle: "normal",
                     }}
                   >
-                    {a.article.content}
+                    {a.attraction.description}
                   </p>
                   <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex gap-3">
                     <Link
                         style={{ textDecorationLine: "none", color: "black" }}
-                        to={`/profile/${a.publisher.id}`}
+                        to={`/profile/${a.author.id}`}
                       > <img
                         className={blogStyle.cardThumb}
                         style={{ border: "3px solid #930412" }}
@@ -129,18 +132,18 @@ const Blog = () => {
                       {/* {JSON.stringify(a.publisher.id)} */}
                       <Link
                         style={{ textDecorationLine: "none", color: "black" }}
-                        to={`/profile/${a.publisher.id}`}
+                        to={`/profile/${a.author.id}`}
                       >
                         <h2 style={robotoSlabStyles}>
-                          {a.publisher.firstName.charAt(0).toUpperCase() +
-                            a.publisher.firstName.slice(1)}
+                          {a.author.firstName.charAt(0).toUpperCase() +
+                            a.author.firstName.slice(1)}
                         </h2>
                       </Link>
                     </div>
 
                     <p>
                       <strong className="text-muted opacity-75">
-                        {moment(a.article.createdAt).fromNow()}
+                        {moment(a.attraction.createdAt).fromNow()}
                       </strong>
                     </p>
                   </div>
@@ -163,8 +166,8 @@ const Blog = () => {
                   }}
                 >
                   <div className=" d-flex align-items-center justify-content-evenly mb-1 ">
-                    <h1 style={robotoSlabStyles}>{a.article.title}</h1>
-                    {Cookies.get("user_id") == a.publisher.id && (
+                    <h1 style={robotoSlabStyles}>{a.attraction.title}</h1>
+                    {Cookies.get("user_id") == a.author.id && (
                       <div style={{ cursor: "pointer" }} onClick={toggleModal}>
                         <i className="bi bi-pencil-square"></i>
                       </div>
@@ -179,13 +182,13 @@ const Blog = () => {
                       fontStyle: "normal",
                     }}
                   >
-                    {a.article.content}
+                    {a.attraction.content}
                   </p>
                   <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex gap-3">
                     <Link
                         style={{ textDecorationLine: "none", color: "black" }}
-                        to={`/profile/${a.publisher.id}`}
+                        to={`/profile/${a.author.id}`}
                       > <img
                         className={blogStyle.cardThumb}
                         style={{ border: "3px solid #930412" }}
@@ -197,18 +200,18 @@ const Blog = () => {
                       {/* {JSON.stringify(a.publisher.id)} */}
                       <Link
                         style={{ textDecorationLine: "none", color: "black" }}
-                        to={`/profile/${a.publisher.id}`}
+                        to={`/profile/${a.author.id}`}
                       >
                         <h2 style={robotoSlabStyles}>
-                          {a.publisher.firstName.charAt(0).toUpperCase() +
-                            a.publisher.firstName.slice(1)}
+                          {a.author.firstName.charAt(0).toUpperCase() +
+                            a.author.firstName.slice(1)}
                         </h2>
                       </Link>
                     </div>
 
                     <p>
                       <strong className="text-muted opacity-75">
-                        {moment(a.article.createdAt).fromNow()}
+                        {moment(a.attraction.createdAt).fromNow()}
                       </strong>
                     </p>
                   </div>
@@ -237,9 +240,9 @@ const Blog = () => {
           )
         )}
       </div>
-      <Modal modal={modal} setModal={setModal}></Modal>
+      <AttractionModal modal={modal} setModal={setModal}></AttractionModal>
     </>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Attractions

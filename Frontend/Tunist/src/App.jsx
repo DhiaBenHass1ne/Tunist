@@ -11,6 +11,8 @@ import Blog from "./views/Blog";
 import Profile from "./views/Profile";
 import SignUp from "./views/SignUp";
 import Carousel from "./components/Signup/Carousel";
+import Attractions from "./views/Attractions";
+import MapTest from "./views/MapTest";
 
 function App() {
   const [refresh, setRefresh] = useState(true)
@@ -29,9 +31,11 @@ function App() {
     <Route path="/tours" element={<Tours  refreshPage={updateList}/>}/>
     <Route path="/admin/*" element={<AdminDash  refreshPage={updateList}/>}/>
     <Route path="/blog" element={<Blog  refreshPage={updateList}/>}/>
+    <Route path="/attractions" element={<Attractions  refreshPage={updateList}/>}/>
     <Route path="/profile/:user_id" element={<Profile  refreshPage={updateList}/>}/>
     <Route path="/signup" element={<SignUp refreshPage={updateList}/>}/>
     <Route path="/carousel" element={<Carousel/>}/>
+    <Route path="/map" element={<MapTest></MapTest>}/>
     </Routes>
    
     </>
