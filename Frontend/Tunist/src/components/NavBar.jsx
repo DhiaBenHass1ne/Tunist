@@ -103,11 +103,11 @@ const NavBar = () => {
           </div>
         ) : (
           <div style={styles.right}>
-            <Link to="/logreg" className={buttonn.button17}>
+            <Link to="/signup" className={buttonn.button17}>
               {" "}
               Register
             </Link>
-            <Link to="/logreg" className={buttonn.button17}>
+            <Link to="/signup" className={buttonn.button17}>
               {" "}
               Login
             </Link>

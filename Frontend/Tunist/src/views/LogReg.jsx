@@ -11,7 +11,7 @@ const LogReg = ({refreshPage}) => {
 
   return (
     <>
-    <Log refreshPage={refreshPage}g/>
+    <Log refreshPage={refreshPage}/>
     <Reg refreshPage={refreshPage}/>
     <Logout refreshPage={refreshPage}/>
     </>

@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Reg from '../Reg'
+import Log from '../Log'
 
-const Form = () => {
+const Form = (props) => {
+  const [component,setComponent]=useState('Login');
+
   return (
     <div>
-      <Reg/>
+    { component === "Register"?
+    <div>
+      <Reg component={component} setComponent={setComponent}/>
+    </div>:
+    <div><Log component={component} setComponent={setComponent}/></div>}
     </div>
+
   )
 }
 

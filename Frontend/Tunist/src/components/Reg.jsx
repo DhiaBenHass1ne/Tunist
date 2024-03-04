@@ -4,8 +4,9 @@ import UserService from '../services/UserService'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import "./Reg.css"
+import {Link} from 'react-router-dom'
 
-const Reg = ({ refreshPage }) => {
+const Reg = ({ refreshPage, component, setComponent }) => {
     const [userId, setUserId] = useState('');
     const hiddenFileInput = useRef(null);
 
@@ -94,7 +95,7 @@ const Reg = ({ refreshPage }) => {
     return (
         <div className="container d-flex justify-content-center">
 		<div>
-            <div className=' p-3  text-center'>
+            <div className='text-center'>
 			<h3>Join us ❤</h3>
             <p className=' text-secondary'>Wether you&apos;re a tourist visiting our country or  a tunisian looking to make someone&apos;s trip unforgettable</p>
             </div>
@@ -138,6 +139,7 @@ const Reg = ({ refreshPage }) => {
 				<input type="submit" value="Register" className="button17" />
                 </div>
 			</form>
+            <p className='text-center'>Already Have An Account? Log In <Link style={{cursor:'pointer'}} onClick={()=>setComponent("Login")}>Here.</Link></p>
 		</div>
     </div>
     )
