@@ -13,6 +13,7 @@ import SignUp from "./views/SignUp";
 import Carousel from "./components/Signup/Carousel";
 import Attractions from "./views/Attractions";
 import MapTest from "./views/MapTest";
+import NewAttraction from "./views/NewAttraction";
 
 function App() {
   const [refresh, setRefresh] = useState(true)
@@ -36,6 +37,7 @@ function App() {
     <Route path="/signup" element={<SignUp refreshPage={updateList}/>}/>
     <Route path="/carousel" element={<Carousel/>}/>
     <Route path="/map" element={<MapTest></MapTest>}/>
+    <Route path="/newAttraction" element={<NewAttraction></NewAttraction>}/>
     </Routes>
    
     </>

@@ -1,96 +1,91 @@
 import React, { useEffect, useState } from "react";
 import style from "./modal.module.css";
+import inputStyle from "./input.module.css";
 import axios from "axios";
 import Cookies from "js-cookie";
-import inputStyle from "./input.module.css"
 
-export default function AttractionModal({modal,setModal}) {
-  const [imgStatus,setImageStatus]=useState("Empty")
+export default function AttractionModal({ modal, setModal,updateArticlePosition,pos }) {
+  const [imgStatus, setImageStatus] = useState("Empty");
 
-  const imageList=[];
+  const imageList = [];
   const [selectedFiles, setSelectedFiles] = useState(null);
-
 
   const [newArticle, setNewArticle] = useState({
     title: "",
     description: "",
     media: [],
     author: { id: Cookies.get("user_id") },
-    state:"Bizerte"
+    state: "Bizerte",
   });
   const [errors, setErrors] = useState([]);
   const [publisherNames, setPublisherNames] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
-
- 
-
-  const handleImageUpload = async (file) =>{
+  const handleImageUpload = async (file) => {
     try {
-        const form = new FormData();
-        form.append("file", file);
-        form.append("upload_preset", "ahmedsm");
-        
-        const response = await axios.post(
-            "https://api.cloudinary.com/v1_1/dljarbi3r/image/upload",
-            form
-            );
-            imageList.push(response.data.secure_url)
-            setNewArticle({...newArticle,media:imageList})
-            setImageStatus("Uploaded")
-            console.log("IMAGE UPLOADED")
-        } catch (error) {
-            console.error("Error uploading image:", error);
-            
-            if (error.response) {
-                console.error("Response data:", error.response.data);
-                console.error("Response status:", error.response.status);
-            } else if (error.request) {
-                console.error("No response received:", error.request);
-            } else {
-                console.error("Error setting up the request:", error.message);
-            }
-        }
-}
+      const form = new FormData();
+      form.append("file", file);
+      form.append("upload_preset", "ahmedsm");
 
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dljarbi3r/image/upload",
+        form
+      );
+      imageList.push(response.data.secure_url);
+      setNewArticle({ ...newArticle, media: imageList });
+      setImageStatus("Uploaded");
+      console.log("IMAGE UPLOADED");
+    } catch (error) {
+      console.error("Error uploading image:", error);
 
-const handleFileChange = async (e) => {
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error setting up the request:", error.message);
+      }
+    }
+  };
+
+  const handleFileChange = async (e) => {
     const files = e.target.files;
     setSelectedFiles(files);
     console.log("FILES =====> :", files);
     setImageStatus("Uploading");
 
-   await Array.from(files).map((selectedFile, idx) => {
-        handleImageUpload(selectedFile);
+    await Array.from(files).map((selectedFile, idx) => {
+      handleImageUpload(selectedFile);
     });
-
-};
-
- 
+  };
 
   const handleSubmit = async (e) => {
+    console.log("this is the pos"+pos);
     e.preventDefault();
     await axios
       .post("http://localhost:8080/api/attractions", newArticle)
-      .then((res) => {console.log(res.data);setNewArticle({
-        title: "",
-        description: "",
-        media: [],
-        author: { id: Cookies.get("user_id") },
-        State:"Bizerte"
-      });toggleModal()})
+      .then((res) => {
+        console.log(res.data);
+        setNewArticle({
+          title: "",
+          description: "",
+          media: [],
+          author: { id: Cookies.get("user_id") },
+          State: "Bizerte",
+          position:pos
+        });
+        toggleModal();
+      })
       .catch((err) => console.log(err));
     await axios
       .get("http://localhost:8080/api/attractions")
       .then((res) => {
         // setArticles(res.data);
         console.log(res.data);
-
       })
       .catch((err) => console.log(err));
   };
-
-  
 
   const toggleModal = () => {
     setModal(!modal);
@@ -120,12 +115,10 @@ const handleFileChange = async (e) => {
       borderRadius: "50%",
       cursor: "pointer",
     },
-
   };
 
   return (
     <>
-  
       {modal && (
         <div className={style.modal}>
           <div onClick={toggleModal} className={style.overlay}></div>
@@ -147,7 +140,10 @@ const handleFileChange = async (e) => {
                 <p> description</p>
                 <textarea
                   onChange={(e) =>
-                    setNewArticle({ ...newArticle, description: e.target.value })
+                    setNewArticle({
+                      ...newArticle,
+                      description: e.target.value,
+                    })
                   }
                   className="form-control"
                   value={newArticle.description}
@@ -169,16 +165,15 @@ const handleFileChange = async (e) => {
               <br />
               <br />
               <label htmlFor="myImage" className={inputStyle.customFileUpload}>
-        Select Images
-      </label>
+                Select Images
+              </label>
               <input
-              multiple
-              className="bi bi-x"
+                multiple
+                className="bi bi-x"
                 type="file"
                 id="myImage"
                 name="myImage"
                 onChange={handleFileChange}
-
                 style={{ display: "none" }}
               />
 

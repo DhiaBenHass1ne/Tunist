@@ -14,36 +14,16 @@ import LandingPageAttractions from "../components/LandingPageAttractions";
 import MapTest from "./MapTest";
 
 const Attractions = () => {
+  const [shownPosition ,setPosition] = useState([])
   const [attractions, setAttractions] = useState([]);
   const [carouselImagesPerArticle, setCarouselImagesPerArticle] = useState([]);
   const [modal, setModal] = useState(false);
   const [choice, setChoice] = useState(0);
+  const [status,setStatus] =useState(false)      
 
+ 
 
-
-  useEffect(() => {
-    // console.log(Cookies.get("user_id"));
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8080/api/attractions"
-        );
-        setAttractions(response.data);
-
-        console.log(response.data);
-        const extractedMedia = response.data.map((data) =>
-          data.attraction.media.map((mediaItem) => mediaItem)
-        );
-
-        setCarouselImagesPerArticle(extractedMedia);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  
 
   const toggleModal = () => {
     setModal(!modal);
@@ -69,13 +49,13 @@ const Attractions = () => {
       <hr></hr>
       <div className="row"  >
         <div className="col-md-6">
-          <LandingPageAttractions choice={choice} setChoice={setChoice}></LandingPageAttractions>
+          <LandingPageAttractions set choice={choice} setChoice={setChoice} status={status}></LandingPageAttractions>
         </div>
-        <div className="col-md-6" style={{ height:"10vh",position: "sticky", top: 0,right:0 }}>
-          <MapTest choice={choice}  setChoice={setChoice} ></MapTest>
+        <div className="col-md-6" style={{ height:"10vh",position: "sticky",top:35,right:0 }}>
+          <MapTest shownPosition={shownPosition} choice={choice}  setChoice={setChoice} ></MapTest>
         </div>
       </div>
-      <AttractionModal modal={modal} setModal={setModal}></AttractionModal>
+      {/* <AttractionModal modal={modal} setModal={setModal}></AttractionModal> */}
     </div>
   );
 };

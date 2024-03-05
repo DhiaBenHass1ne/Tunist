@@ -6,8 +6,9 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,6 +27,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "attractions")
 public class Attraction {
 	
@@ -38,6 +40,8 @@ public class Attraction {
 	    @JoinColumn(name = "author")
 	    @JsonBackReference
 	    private User author;
+		
+		private List<Float> position;
 		
 		@NotEmpty(message = "Username is required!")
 		@Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
@@ -60,11 +64,12 @@ public class Attraction {
 	    private List<PrivateTour> privateTours;
 		
 		@ManyToMany
+//		@JsonBackReference(value="public-attraction-tour")
 	    @JoinTable(
 	        name = "public_attraction_tour",
 	        joinColumns = @JoinColumn(name = "tour_id"),
 	        inverseJoinColumns = @JoinColumn(name = "attraction_id"))
-		
+
 	    private List<PublicTour> publicTours;
 
 
@@ -170,6 +175,14 @@ public class Attraction {
 
 		public List<PublicTour> getPublicTours() {
 			return publicTours;
+		}
+
+		public List<Float> getPosition() {
+			return position;
+		}
+
+		public void setPosition(List<Float> position) {
+			this.position = position;
 		}
 
 		public void setPublicTours(List<PublicTour> publicTours) {

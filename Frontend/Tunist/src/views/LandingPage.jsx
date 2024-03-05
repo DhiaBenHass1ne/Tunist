@@ -114,7 +114,7 @@ const LandingPage = () => {
         
             <Arrow ></Arrow>
 </div>
-      <LandingPageAttractions />
+      <LandingPageAttractions status={false} />
       
       <div
         style={styles.scrollButton}

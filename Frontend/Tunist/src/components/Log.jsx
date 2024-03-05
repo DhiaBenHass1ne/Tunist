@@ -32,7 +32,7 @@ const handleSubmit = (e) => {
         .then(res => {
             Cookies.set('user_id', `${res.data.id}`);
             console.log(res);
-            refreshPage();
+            // refreshPage();
             clearForm();
         })
         .catch(err => {
