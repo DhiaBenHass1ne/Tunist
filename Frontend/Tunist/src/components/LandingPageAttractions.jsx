@@ -155,6 +155,14 @@ const LandingPageAttractions = ({setChoice,choice,status,pos}) => {
     // You can perform any other logic or state updates based on the choice
   };
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
 
   
   return (
@@ -216,7 +224,7 @@ const LandingPageAttractions = ({setChoice,choice,status,pos}) => {
             </div>
 
             <button type="submit" className={`btn btn-success ${style.submitButton}`}>
-              Submit
+              Post
             </button>
           </form>
           

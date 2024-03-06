@@ -44,7 +44,7 @@ const handleSubmit = (e) => {
     <div className=' p-3  text-center'>
     <h3>Welcome Back ❤</h3>
     <p className=' text-secondary'>We missed you!</p>
-    <form onSubmit={handleSubmit}>
+    <form style={{marginLeft:"29%"}} onSubmit={handleSubmit}>
         <div className="form-group">
             <label>Email</label>
             <input name="email" className="form-control" onChange={(e)=>{setLoggingUserr({...loggingUser,email:e.target.value})}} value={loggingUser.email}/>

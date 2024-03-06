@@ -41,14 +41,14 @@ public class Attraction {
 	    @JsonBackReference
 	    private User author;
 		
-		private List<BigDecimal> position;
+		private List<Float> position;
 		
 		@NotEmpty(message = "Username is required!")
-		@Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
+		@Size(min = 3, max = 30, message = "title must be between 3 and 30 characters")
 		private String title;
 		
 		@NotEmpty(message = "Username is required!")
-		@Size(min = 3, max = 150, message = "Username must be between 3 and 30 characters")
+		@Size(min = 3, max = 250, message = "description must be between 3 and 30 characters")
 		private String description;
 		
 		private List<String> media;
@@ -177,11 +177,11 @@ public class Attraction {
 			return publicTours;
 		}
 
-		public List<BigDecimal> getPosition() {
+		public List<Float> getPosition() {
 			return position;
 		}
 
-		public void setPosition(List<BigDecimal> position) {
+		public void setPosition(List<Float> position) {
 			this.position = position;
 		}
 
