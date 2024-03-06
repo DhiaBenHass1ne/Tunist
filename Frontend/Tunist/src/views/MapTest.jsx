@@ -5,14 +5,15 @@ import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
 
 
-const MapTest = ({ choice,setPos,pos }) => {
+const MapTest = ({ choice,pos ,setPos}) => {
   const [positions, setPositions] = useState([
-    [36.8065, 10.1815],
-    [50.6210, 10.1815],
+    [33.8869, 9.5863],
+    [37.2744, 9.8730],
     [36.4730, 10.1815],
     [36.5340, 10.1815],
     [36.5780, 10.1815]
   ]);
+  
   
 
     function DraggableMarker({ pos, setPos }) {
@@ -70,7 +71,7 @@ const MapTest = ({ choice,setPos,pos }) => {
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <DraggableMarker />
+      <DraggableMarker pos={pos} setPos={setPos} />
 
       {JSON.stringify(choice)}
     {/* <Marker position={positions[choice]}>

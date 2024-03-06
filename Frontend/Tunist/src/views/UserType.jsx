@@ -2,6 +2,10 @@
     import axios from "axios";
     import Cookies from "js-cookie";
     import "./UserType.css";
+    // Initialization for ES Users
+import { Input, initMDB } from "mdb-ui-kit";
+
+initMDB({ Input });
 
     const UserType = ({ refreshPage }) => {
     const languages = [
@@ -321,10 +325,12 @@
         <div className="container d-flex justify-content-around">
         <div>
             <form onSubmit={handleSubmit}>
-            <div className="form-group">
-                <label>
-                What is the user type:
+            <div className="select-wrapper form-group">
+                <h5>
+                Who Are You ? 
+                </h5>
                 <select
+                className=" form-control"
                     value={userType}
                     onChange={(e) => {
                     setUserType(e.target.value);
@@ -337,15 +343,15 @@
                     <option value="guide">Guide</option>
                     <option value="neither">Neither</option>
                 </select>
-                </label>
             </div>
             {userType == "guide" ? (
                 <>
-                {JSON.stringify(guide)}
+                {/* {JSON.stringify(guide)} */}
                 <div className="form-group">
-                    <label>Bio:</label>
-                    <input
+                    <label>Biography:</label>
+                    <textarea
                     name="bio"
+                    rows={3}
                     className="form-control"
                     onChange={(e) => {
                         setGuide({ ...guide, bio: e.target.value });
@@ -353,7 +359,9 @@
                     value={guide.bio}
                     />
                 </div>
+             
                 <div className="form-group">
+                    
                     <label>Price:</label>
                     <input
                     name="guide"
@@ -396,8 +404,8 @@
             ) : (
                 <>
                 <div className="select-wrapper form-group">
-                    {JSON.stringify(tourist)}
-                    <label>Nationality:</label>
+                    {/* {JSON.stringify(tourist)} */}
+                    {/* <label>Nationality:</label> */}
                     <select
                     className="select form-control"
                     onChange={(e) => {

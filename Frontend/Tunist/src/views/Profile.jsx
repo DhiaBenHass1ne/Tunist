@@ -138,7 +138,8 @@ const Profile = () => {
       <h2 className="text-muted" style={{ textAlign: 'center' }}>Articles</h2>
     </div>
     <hr />
-          {articles.map((a, index) => (
+    
+          {articles ?  articles.map((a, index) => (
             <Row className="justify-content-evenly" key={a.id} style={{ marginBottom: "40px" }}>
               <Col sm={2} md={5}>
                 <Carousel>
@@ -179,7 +180,12 @@ const Profile = () => {
                 </div>
               </Col>
             </Row>
-          ))}
+          ))
+          :
+          <h1>user has no articles</h1>}
+
+          
+        
 
           {/* Another MDBCard next to it */}
           

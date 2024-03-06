@@ -211,7 +211,7 @@ const LandingPageAttractions = ({setChoice,choice,status,pos}) => {
                 id="myImage"
                 name="myImage"
                 onChange={handleFileChange}
-                style={{ display: 'none' }}
+                // style={{ display: 'none' }}
               />
             </div>
 
