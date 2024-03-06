@@ -19,7 +19,7 @@ const Attractions = () => {
   const [carouselImagesPerArticle, setCarouselImagesPerArticle] = useState([]);
   const [modal, setModal] = useState(false);
   const [choice, setChoice] = useState(0);
-  const [status,setStatus] =useState(true)      
+  const [status,setStatus] =useState(false)      
   const [position, setPosition] = useState([36.5780, 10.1815])
   const [positions, setPositions] = useState([
     [36.8065, 10.1815],
