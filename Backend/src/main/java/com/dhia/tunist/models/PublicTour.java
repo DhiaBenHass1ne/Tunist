@@ -7,7 +7,9 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,6 +26,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "publicTours")
 public class PublicTour {
 	@Id
@@ -40,13 +43,20 @@ public class PublicTour {
 	@JsonBackReference(value="public-guide-tour")
 	private Guide publicGuide;
 	
-	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	@JoinColumn(name = "tourist_id")
-	@JsonBackReference(value="public-tourist-tour")
+//	@ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//	@JoinColumn(name = "tourist_id")
+//	@JsonBackReference(value="public-tourist-tour")
+//	
+//	private  Tourist publicTourist;
 	
-	private Tourist publicTourist;
+	
+
+	 @ManyToMany(mappedBy = "publicTours")
+//	 @JsonBackReference(value="public-tourist-tour")
+	 private List<Tourist> publicTourists;
 	
 	 @ManyToMany(mappedBy = "publicTours")
+//	 @JsonManagedReference(value="public-attraction-tour")
 	 private List<Attraction> publicAttractions;
 
 	
@@ -97,12 +107,12 @@ public class PublicTour {
 		this.publicGuide = publicGuide;
 	}
 
-	public Tourist getPublicTourist() {
-		return publicTourist;
+	public List<Tourist> getPublicTourists() {
+		return publicTourists;
 	}
 
-	public void setPublicTourist(Tourist publicTourist) {
-		this.publicTourist = publicTourist;
+	public void setPublicTourists(List<Tourist> publicTourists) {
+		this.publicTourists = publicTourists;
 	}
 
 	public List<Attraction> getPublicAttractions() {

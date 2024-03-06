@@ -58,6 +58,7 @@ public class PrivateTourController {
     public ResponseEntity<PrivateTour> createPrivateTour(@RequestBody @Valid PrivateTour privateTour) {
     	Tourist tourist = touristService.findTouristById(privateTour.getPrivateTourist().getId());
     	Guide guide = guideService.findGuideById(privateTour.getPrivateGuide().getId());
+    	System.out.println("guide nationality ==> "+tourist.getNationality()+"   guide bio ====>"+guide.getBio());
         List<Attraction> preAttractions = privateTour.getPrivateAttractions() ;
          List<Attraction> attractions= new ArrayList<>()   ;
         for (Attraction preattraction : preAttractions) {
@@ -66,7 +67,7 @@ public class PrivateTourController {
         privateTour.setPrivateGuide(guide);
         privateTour.setPrivateTourist(tourist);
         privateTour.setPrivateAttractions(attractions);
-        System.out.println("set attractions 0 ===>"+ attractions.get(0).getTitle()+"attraction 1 ===>"+attractions.get(1).getTitle());
+//        System.out.println("set attractions 0 ===>"+ attractions.get(0).getTitle()+"attraction 1 ===>"+attractions.get(1).getTitle());
         PrivateTour createdPrivateTour = privateTourService.createPrivateTour(privateTour);
         return new ResponseEntity<>(createdPrivateTour, HttpStatus.CREATED);
 

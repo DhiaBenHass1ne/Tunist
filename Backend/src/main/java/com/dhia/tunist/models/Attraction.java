@@ -1,5 +1,6 @@
 package com.dhia.tunist.models;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
@@ -41,7 +41,7 @@ public class Attraction {
 	    @JsonBackReference
 	    private User author;
 		
-		private List<Float> position;
+		private List<BigDecimal> position;
 		
 		@NotEmpty(message = "Username is required!")
 		@Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
@@ -177,11 +177,11 @@ public class Attraction {
 			return publicTours;
 		}
 
-		public List<Float> getPosition() {
+		public List<BigDecimal> getPosition() {
 			return position;
 		}
 
-		public void setPosition(List<Float> position) {
+		public void setPosition(List<BigDecimal> position) {
 			this.position = position;
 		}
 

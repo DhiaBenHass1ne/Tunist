@@ -5,14 +5,14 @@ const Tours = ({ refreshPage }) => {
     const [logged,setLogged] = useState({})
     const [publicTour, setPublicTour] = useState({
         publicGuide: {id:12},
-        publicTourist: {id:7},
-        publicAttractions : [{id:2},{id:1}],
+        publicTourists: [{id:7},{id:3}],
+        publicAttractions : [{id:2}],  
         date : ""
     })
     const [privateTour, setPrivateTour] = useState({
-      privateGuide: {id:8},
-      privateTourist: {id:7},
-      privateAttractions : [{id:2},{id:1}],
+      privateGuide: {id:1},
+      privateTourist: {id:1},
+      privateAttractions : [{id:2}],
       date : ""
   })
     const handleSubmitPublic = (e)=>{
@@ -32,7 +32,7 @@ const Tours = ({ refreshPage }) => {
     return ( 
     <div>
       <form onSubmit={handleSubmitPublic}>
-        <label>Select Date time for public tour with guide id {publicTour.publicGuide.id} and tourist id {publicTour.publicTourist.id}</label>
+        <label>Select Date time for public tour with guide id {publicTour.publicGuide.id} and first tourist id {publicTour.publicTourists[0].id}</label>
       <input type='datetime-local' onChange={(e)=>{setPublicTour( {...publicTour,date:e.target.value}); console.log(publicTour)} }/>
       <button>Submit public tour</button>
         

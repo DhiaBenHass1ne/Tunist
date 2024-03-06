@@ -47,7 +47,7 @@ public class House {
     @DecimalMin(value = "0.0", inclusive = false, message="Price must be greater than zero!")
     private BigDecimal price;
     
-    
+    private String phone;
 	private boolean available=true;
 	
 	@NotEmpty(message="Media is required!")
@@ -116,6 +116,14 @@ public class House {
 	}
 
 
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
 	public List<String> getMedia() {
 		return media;

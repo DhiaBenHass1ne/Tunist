@@ -57,19 +57,54 @@ public class PublicTourController {
 	
     @PostMapping("")
     public ResponseEntity<PublicTour> createPublicTour(@RequestBody @Valid PublicTour publicTour) {
-    	Tourist tourist = touristService.findTouristById(publicTour.getPublicTourist().getId());
-    	Guide guide = guideService.findGuideById(publicTour.getPublicGuide().getId());
+    	if(publicTour.getPublicTourists().isEmpty()==false) {
+    		List<Tourist> tourists = new ArrayList<>();
+    		for (Tourist preTourist : publicTour.getPublicTourists()) {
+    			Tourist tourist = touristService.findTouristById(preTourist.getId());
+    			tourists.add(tourist);
+    		publicTour.setPublicTourists(tourists);
+    		}
+    	}
         List<Attraction> preAttractions = publicTour.getPublicAttractions() ;
+//        System.out.println("first id is ===>"+publicTour.getPublicAttractions().get(0).getId());
          List<Attraction> attractions= new ArrayList<>()   ;
+         if( preAttractions!=null) {
+        	 
         for (Attraction preattraction : preAttractions) {
-        	attractions.add(attractionService.findAttractionById(preattraction.getId())) ;
+        	Attraction fullAttraction =attractionService.findAttractionById(preattraction.getId());
+        	attractions.add(fullAttraction) ;
+        	System.out.println("attraction id is "+preattraction.getId()+" and title is "+preattraction.getTitle());
+        	publicTour.setPublicAttractions(attractions);
         }
-        publicTour.setPublicGuide(guide);
-        System.out.println("public tour's creation guide rating ==>"+guide.getBio());
-        publicTour.setPublicTourist(tourist);
-        publicTour.setPublicAttractions(attractions);
-        System.out.println("set attractions 0 ===>"+ attractions.get(0).getTitle()+"attraction 1 ===>"+attractions.get(1).getTitle());
+         }
+         if(publicTour.getPublicGuide()!=null) {
+        	 
+         
+        Guide guide = guideService.findGuideById(publicTour.getPublicGuide().getId());
+        if(guide!=null) {        	
+        	publicTour.setPublicGuide(guide);
+        }
+         }
+         
     	PublicTour createdPublicTour = publicTourService.createPublicTour(publicTour);
+    	if(attractions.isEmpty()==false) {
+    		
+        for (Attraction   addedAttraction: attractions) {
+        	List<PublicTour> tours = addedAttraction.getPublicTours();
+        	tours.add(createdPublicTour);
+        	addedAttraction.setPublicTours(tours);
+        	attractionService.updateAttraction(addedAttraction);
+        }
+    	}
+    	if (createdPublicTour.getPublicTourists()!=null) {
+    		for (Tourist   addedTourist: createdPublicTour.getPublicTourists()) {
+    			List<PublicTour> tours =addedTourist.getPublicTour();    
+    			tours.add(createdPublicTour);
+    			addedTourist.setPublicTour(tours);
+    			touristService.updateTourist(addedTourist);
+    		
+    		}
+    	}
     	
         return new ResponseEntity<>(createdPublicTour, HttpStatus.CREATED);
     }
@@ -80,20 +115,37 @@ public class PublicTourController {
         PublicTour foundPublicTour = publicTourService.findPublicTourById(id);
         if (foundPublicTour != null) {
 			Map<String, Object> publicTourMap = new HashMap<>();
-			publicTourMap.put("publicTour", foundPublicTour); // Add article data
+			publicTourMap.put("id", foundPublicTour.getId()); 
+			publicTourMap.put("date", foundPublicTour.getDate()); 
+			System.out.println("date ===>"+foundPublicTour.getDate());
+			
 			publicTourMap.put("attractions",foundPublicTour.getPublicAttractions());
-			Long touristId= foundPublicTour.getPublicTourist().getId();
-			Tourist tourist = touristService.findTouristById(touristId);
-			System.out.println("private tour's tourist first nationality ==>"+tourist.getNationality());
-			Long guideId = foundPublicTour.getPublicGuide().getId();
-			Guide guide = guideService.findGuideById(guideId);
-//			PUBLIC ATTRACTIONS HHERE vvv
-//			List <Attraction> publicAttractions = new ArrayList<>();
-//			List<Attraction> prePublicAttractions=foundPublicTour.getPublicAttractions();
-//	        for (Attraction attraction : prePublicAttractions) {
-//	        	publicAttractions.add(attractionService.findAttractionById(attraction.getId()));
-//	        }
+//			System.out.println("public attraction 0  title ==>"+foundPublicTour.getPublicAttractions().get(0).getTitle());
+//			Long touristId= foundPublicTour.getPublicTourists().getId();
+//			Tourist tourist = touristService.findTouristById(touristId);
+			List <Object> publicAttractions = new ArrayList<>();
+			List<Attraction> prePublicAttractions=foundPublicTour.getPublicAttractions();
+			if(prePublicAttractions!=null) {
+				
+	        for (Attraction attraction : prePublicAttractions) {
+				Map<String, Object> publicAttractionMap = new HashMap<>();
+				publicAttractionMap.put("id", attraction.getId());
+				publicAttractionMap.put("title", attraction.getTitle());
+				publicAttractionMap.put("description", attraction.getDescription());
+				publicAttractionMap.put("state", attraction.getState());
+				publicAttractionMap.put("media", attraction.getMedia());
+				publicAttractions.add(publicAttractionMap);
+	        }
+			}
+	        publicTourMap.put("attractions",publicAttractions);
+	        List<Tourist> tourists = foundPublicTour.getPublicTourists();
+	        if(tourists!=null) 
+	        {
+	        	List<Map<String,Object>> touristsData = new ArrayList<>();
+	        	for(Tourist tourist : tourists) {
 				if(tourist!=null) {
+					
+					
 					Map<String, Object> touristMap = new HashMap<>();
 					touristMap.put("id", tourist.getId());
 					touristMap.put("nationality", tourist.getNationality());
@@ -108,9 +160,14 @@ public class PublicTourController {
 				userMap.put("attraction", tourist.getUser().getAttractions());
 				userMap.put("houses", tourist.getUser().getHouses());
 				touristMap.put("user", userMap);}
-				publicTourMap.put("tourist", touristMap);
+				touristsData.add(touristMap);
 				}
-				
+				publicTourMap.put("tourists", touristsData);
+				}
+        }
+	        
+			Long guideId = foundPublicTour.getPublicGuide().getId();
+			Guide guide = guideService.findGuideById(guideId);
 				if(guide!=null ) {
 					Map<String, Object> guidetMap = new HashMap<>();
 					guidetMap.put("id", guide.getId()); 
@@ -143,16 +200,80 @@ public class PublicTourController {
         
     }
     
+    
+    
     @GetMapping("")
-    public ResponseEntity<List<PublicTour>> findAllPublicTours() {
-        List<PublicTour> allPublicTours  = publicTourService.allPublicTours();
+    public List<Map<String, Object>> showAllArticles() {
+        List<PublicTour> allTours = publicTourService.allPublicTours(); // Assuming you have an Article class
         
-        
-        return new ResponseEntity<>(allPublicTours, HttpStatus.OK);
+        List<Map<String, Object>> tourData = new ArrayList<>();
+
+        for (PublicTour tour : allTours) {
+        	
+            Map<String, Object> tourMap = new HashMap<>();
+			tourMap.put("id", tour.getId()); // Add article data
+            tourMap.put("article", tour); // Add article data
+            Guide guide = tour.getPublicGuide(); // Assuming you have a PublisherModel class
+            if (guide != null && guide.getId() != null) {
+            	Map<String, Object> guidetMap = new HashMap<>();
+				guidetMap.put("id", guide.getId()); 
+				guidetMap.put("privateTours", guide.getPrivateTour());
+				guidetMap.put("publicTours", guide.getPublicTour());
+				guidetMap.put("bio", guide.getBio());
+				guidetMap.put("price", guide.getPrice());
+				guidetMap.put("rating", guide.getRating());
+				guidetMap.put("languages", guide.getLanguages());
+				if(guide!=null && guide.getUser() !=null) {	
+					System.out.println("guide user id ====>"+guide.getUser().getId());
+				Map<String, Object> userMap = new HashMap<>();
+				
+				userMap.put("firstName", guide.getUser().getFirstName());
+				userMap.put("lastName", guide.getUser().getLastName());
+				userMap.put("image", guide.getUser().getImage());
+				userMap.put("attraction", guide.getUser().getAttractions());
+				userMap.put("houses", guide.getUser().getHouses());
+				guidetMap.put("user", userMap);
+				}
+				tourMap.put("guide",guidetMap);
+				        } 
+            	List<Tourist> tourists = tour.getPublicTourists();
+            if (tourists != null ) {
+            	List<Map<String,Object>> touristsData= new ArrayList<>();
+            	for(Tourist tourist: tourists)
+            	{
+            	Map<String, Object> touristMap = new HashMap<>();
+            	touristMap.put("id", tourist.getId()); 
+            	touristMap.put("privateTours", tourist.getPrivateTour());
+            	touristMap.put("publicTours", tourist.getPublicTour());
+            	touristMap.put("nationality", tourist.getNationality());
+			
+				if(tourist!=null && tourist.getUser() !=null) {	
+					System.out.println("guide user id ====>"+guide.getUser().getId());
+				Map<String, Object> userMap = new HashMap<>();
+				
+				userMap.put("firstName", tourist.getUser().getFirstName());
+				userMap.put("lastName", tourist.getUser().getLastName());
+				userMap.put("image", tourist.getUser().getImage());
+				userMap.put("attraction", tourist.getUser().getAttractions());
+				userMap.put("houses", tourist.getUser().getHouses());
+				touristMap.put("user", userMap);
+				}
+				
+				touristsData.add(touristMap);
+				        } 
+            	tourMap.put("tourists", touristsData);
+            }
+            tourData.add(tourMap);
+        }
+
+        return tourData;
     }
+
     
     
-    @PutMapping("/edit")
+    
+    
+    @PutMapping("/id")
     public ResponseEntity<PublicTour> updatePublicTour(@RequestBody @Valid PublicTour publicTour){
     	
     	PublicTour updatedPublicTour = publicTourService.updatePublicTour(publicTour);

@@ -7,10 +7,11 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,6 +32,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 @Entity
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name="guides")
 public class Guide {
 
@@ -69,9 +71,11 @@ public class Guide {
     @NotEmpty(message = "At least one language is required!")
 	private List<String> languages;
     
-    
+	
+    @NotEmpty(message = "At least one language is required!")
+	private List<String> cin;
 
-
+    private String status="pending";
 
 	@OneToOne(mappedBy = "guide")
 	@JoinColumn(name="user_id")
@@ -149,6 +153,14 @@ public class Guide {
 		this.available = available;
 	}
 
+	public List<String> getCin() {
+		return cin;
+	}
+
+	public void setCin(List<String> cin) {
+		this.cin = cin;
+	}
+
 	public List<String> getLanguages() {
 		return languages;
 	}
@@ -187,6 +199,14 @@ public class Guide {
 
 	public void setPrivateTour(List<PrivateTour> privateTour) {
 		this.privateTour = privateTour;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public List<PublicTour> getPublicTour() {

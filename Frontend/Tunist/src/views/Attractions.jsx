@@ -14,13 +14,20 @@ import LandingPageAttractions from "../components/LandingPageAttractions";
 import MapTest from "./MapTest";
 
 const Attractions = () => {
-  const [shownPosition ,setPosition] = useState([])
+  const [shownPosition ,setShownPosition] = useState([])
   const [attractions, setAttractions] = useState([]);
   const [carouselImagesPerArticle, setCarouselImagesPerArticle] = useState([]);
   const [modal, setModal] = useState(false);
   const [choice, setChoice] = useState(0);
-  const [status,setStatus] =useState(false)      
-
+  const [status,setStatus] =useState(true)      
+  const [position, setPosition] = useState([36.5780, 10.1815])
+  const [positions, setPositions] = useState([
+    [36.8065, 10.1815],
+    [50.6210, 10.1815],
+    [36.4730, 10.1815],
+    [36.5340, 10.1815],
+    [36.5780, 10.1815]
+  ]);
  
 
   
@@ -49,10 +56,10 @@ const Attractions = () => {
       <hr></hr>
       <div className="row"  >
         <div className="col-md-6">
-          <LandingPageAttractions set choice={choice} setChoice={setChoice} status={status}></LandingPageAttractions>
+          <LandingPageAttractions setStatus={setStatus} positions={positions}  setPositions={setPositions} setPosition={setPosition} position={position} set choice={choice} setChoice={setChoice} status={status}></LandingPageAttractions>
         </div>
         <div className="col-md-6" style={{ height:"10vh",position: "sticky",top:35,right:0 }}>
-          <MapTest shownPosition={shownPosition} choice={choice}  setChoice={setChoice} ></MapTest>
+          <MapTest  positions={positions} setPositions={setPositions} setPosition={setPosition} position={position} choice={choice} status={status} setChoice={setChoice} ></MapTest>
         </div>
       </div>
       {/* <AttractionModal modal={modal} setModal={setModal}></AttractionModal> */}

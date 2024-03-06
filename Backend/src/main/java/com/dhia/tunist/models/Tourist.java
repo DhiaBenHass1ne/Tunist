@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +17,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
@@ -23,6 +28,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "tourists")
 public class Tourist {
 	@Id
@@ -40,13 +46,20 @@ public class Tourist {
 	@OneToMany(mappedBy="privateTourist", fetch = FetchType.EAGER)
 	@JsonManagedReference(value="private-tourist-tour")
 	@JsonIgnore
-    private List<PrivateTour> privateTour;
+    private List<PrivateTour> privateTours;
     
-	@OneToMany(mappedBy="publicTourist", fetch = FetchType.EAGER)
-	@JsonManagedReference(value="public-tourist-tour")
-	@JsonIgnore
-    private List<PublicTour> publicTour;
+//	@OneToMany(mappedBy="publicTourist", fetch = FetchType.EAGER)
+//	@JsonManagedReference(value="public-tourist-tour")
+//    private List<PublicTour> publicTour;
     
+
+	@ManyToMany
+    @JoinTable(
+        name = "public_tourists_tours",
+        joinColumns = @JoinColumn(name = "tour_id"),
+        inverseJoinColumns = @JoinColumn(name = "tourist_id"))
+//	@JsonManagedReference(value="public-tourist-tour")
+    private List<PublicTour> publicTours;
 
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -90,11 +103,11 @@ public class Tourist {
 
 
 	public List<PublicTour> getPublicTour() {
-		return publicTour;
+		return publicTours;
 	}
 
 	public void setPublicTour(List<PublicTour> publicTour) {
-		this.publicTour = publicTour;
+		this.publicTours = publicTour;
 	}
 
 	public String getNationality() {
@@ -122,11 +135,11 @@ public class Tourist {
 	}
 
 	public List<PrivateTour> getPrivateTour() {
-		return privateTour;
+		return privateTours;
 	}
 
 	public void setPrivateTour(List<PrivateTour> privateTour) {
-		this.privateTour = privateTour;
+		this.privateTours = privateTour;
 	}
 	
 	

@@ -5,13 +5,14 @@ const CrudRoute = () => (
       rendered
     </div>
   );
+
 export const UserList = (props) => (
     <List resource="users"  {...props}>
         <Datagrid rowClick="edit">
             {/* <TextField source="_id" /> */}
             {/* <TextField source="fName" />
             <TextField source="lName" />  */}
-            <TextField source="email" />
+            <TextField source="user.guide" />
             {/* <TextField source="adress" /> 
             <TextField source="phone" /> 
             <ImageField source="profilePic.url"  /> 

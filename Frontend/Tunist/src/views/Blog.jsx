@@ -9,7 +9,7 @@ import axios from "axios";
 import moment from "moment";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
-
+import ReadMore from "../components/ReadMore";
 const Blog = () => {
   const [articles, setArticles] = useState([]);
   const [carouselImagesPerArticle, setCarouselImagesPerArticle] = useState([]);
@@ -102,16 +102,19 @@ const Blog = () => {
                       </div>
                     )}
                   </div>
+
                   <p
                   className="text-muted"
-                    style={{
-                      fontFamily: '"Roboto Slab", serif',
-                      fontOpticalSizing: "auto",
-                      fontWeight: 500, // Replace with your desired weight value
-                      fontStyle: "normal",
-                    }}
+                  style={{
+                    fontFamily: '"Roboto Slab", serif',
+                    fontOpticalSizing: "auto",
+                    fontWeight: 500, // Replace with your desired weight value
+                    fontStyle: "normal",
+                  }}
                   >
+                    <ReadMore>
                     {a.article.content}
+                    </ReadMore>
                   </p>
                   <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex gap-3">
@@ -172,15 +175,18 @@ const Blog = () => {
                   </div>
                   <p
                   className="text-muted"
-                    style={{
-                      fontFamily: '"Roboto Slab", serif',
-                      fontOpticalSizing: "auto",
-                      fontWeight: 500, // Replace with your desired weight value
-                      fontStyle: "normal",
-                    }}
+                  style={{
+                    fontFamily: '"Roboto Slab", serif',
+                    fontOpticalSizing: "auto",
+                    fontWeight: 500, // Replace with your desired weight value
+                    fontStyle: "normal",
+                  }}
                   >
+                    <ReadMore>
                     {a.article.content}
+                  </ReadMore>
                   </p>
+                    
                   <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex gap-3">
                     <Link

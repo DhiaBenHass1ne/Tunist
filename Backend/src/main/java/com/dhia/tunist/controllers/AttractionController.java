@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dhia.tunist.models.Attraction;
-import com.dhia.tunist.models.PrivateTour;
-import com.dhia.tunist.models.PublicTour;
 import com.dhia.tunist.models.User;
 import com.dhia.tunist.services.AttractionService;
 import com.dhia.tunist.services.PrivateTourService;
@@ -102,6 +100,9 @@ public class AttractionController {
 
         for (Attraction attraction : allAttractions) {
             Map<String, Object> attractionMap = new HashMap<>();
+            
+            attractionMap.put("id", attraction.getId()); // Add article data
+            attractionMap.put("position", attraction.getPosition()); // Add article data
             attractionMap.put("attraction", attraction); // Add article data
             User author = attraction.getAuthor(); // Assuming you have a PublisherModel class
             if (author != null && author.getId() != null) {
@@ -124,8 +125,8 @@ public class AttractionController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<Attraction> updateArticle(@RequestBody @Valid Attraction attraction) {
-
+	public ResponseEntity<Attraction> updateArticle(@RequestBody @Valid Attraction attraction, @PathVariable Long id) {
+		attraction.setId(id);	
 		Attraction updatedAttraction = attractionService.updateAttraction(attraction);
 
 		return new ResponseEntity<>(updatedAttraction, HttpStatus.CREATED);

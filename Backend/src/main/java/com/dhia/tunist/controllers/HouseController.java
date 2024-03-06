@@ -29,7 +29,7 @@ public class HouseController {
     private HouseService houseService;
     
     
-    @PostMapping("/new")
+    @PostMapping("")
     public ResponseEntity<House> createHouse(@RequestBody @Valid House house) {
         House createdHouse = houseService.createHouse(house);
         return new ResponseEntity<>(createdHouse, HttpStatus.CREATED);
@@ -54,7 +54,7 @@ public class HouseController {
         return new ResponseEntity<>(allHouses, HttpStatus.OK);
     }
     
-    @PatchMapping("/edit")
+    @PatchMapping("")
     public ResponseEntity<House> updatedHouse(@RequestBody @Valid House house){
     	
     	House updatedHouse = houseService.updateHouse(house);
