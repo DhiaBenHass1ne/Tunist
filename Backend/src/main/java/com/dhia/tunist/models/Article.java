@@ -40,6 +40,7 @@ public class Article {
 	
 	@NotBlank(message = "The content is required.")
 	@Size(min = 2, message = "Please enter a valid content !")
+	@Column(columnDefinition="TEXT")
 	private String content;
 	
 	@NotEmpty(message="Media is required!")

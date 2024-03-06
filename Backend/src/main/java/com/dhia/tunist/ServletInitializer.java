@@ -1,4 +1,4 @@
-package src.main.java.com.dhia.tunist;
+package com.dhia.tunist;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

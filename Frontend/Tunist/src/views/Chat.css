@@ -1,0 +1,39 @@
+.ce-my-message-bubble{
+    background-color: #930412 !important;
+}
+
+.ce-chat-title-text{
+    color: #930412;
+}
+
+.ce-chat-subtitle-text{
+    color: #930412;
+}
+
+.ce-primary-button {
+    background-color: #930412 !important;
+    color: #FFFFFFFF!important;
+}
+
+#ce-send-message-button{
+    background-color: #930412 !important;
+    color: #FFFFFFFF!important;
+}
+
+.ce-chat-title-text:hover{
+    color: #64040d;
+}
+
+.ce-chat-subtitle-text:hover{
+    color: #64040d;
+}
+
+
+.ce-chat-form-container{
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.ce-user-typing-text{
+    color: #64040d !important; 
+}

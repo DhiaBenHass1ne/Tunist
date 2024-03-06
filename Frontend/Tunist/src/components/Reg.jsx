@@ -45,10 +45,11 @@ const Reg = ({ refreshPage, component, setComponent }) => {
         });
     }
     const [imgStatus,setImageStatus]=useState("Empty")
-    const [image, setImage] = useState({image:""});
+    const [image, setImage] = useState(null);
     
     const handleFileChange = async (e) => {
         const selectedFile = e.target.files[0];
+        setImage(e.target.files[0]) ;
         setImageStatus("Uploading");
     
     
@@ -80,18 +81,42 @@ const Reg = ({ refreshPage, component, setComponent }) => {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const data = {
+            "username": newUser.email,
+            "secret": "Dddd1234",
+            "email": newUser.email,
+            "first_name": newUser.firstName,
+            "last_name": newUser.lastName,
+            "avatar":image
+        };
+    
+        const config = {
+            method: 'post',
+            url: 'https://api.chatengine.io/users/',
+            headers: {
+                'PRIVATE-KEY': '{{dbb72ff7-d38a-48da-8b6f-84e2ffce7a46}}',
+                'content-type': 'multipart/form-data'
+            },
+            data : data
+        };
         UserService.register(newUser)
             .then(res => {
-                setUserStatus("registered")
                 Cookies.set('user_id', `${res.data.id}`);
-                console.log(res,"****************************",userStatus,Cookies.get('user_id'));
+                console.log(res);
                 refreshPage();
                 clearForm();
             })
             .catch(err => {
-                console.log(err.response);
+                console.log(err.response.data);
+            });
+            await axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
             });
     }
 

@@ -15,13 +15,24 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import moment from "moment";
 import { Carousel, Col, Row } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { getOrCreateChat } from 'react-chat-engine'
+import UserService from '../services/UserService'
 
 const Profile = () => {
   const [articles, setArticles] = useState([]);
   const [carouselImagesPerArticle, setCarouselImagesPerArticle] = useState([]);
   const {user_id} = useParams();
   const [user,setUser] = useState({})
+  const [currUser,setCurrUser] = useState({})
+  const nav = useNavigate();
+
+  const creds = {
+    projectID: 'eaec0c42-f575-4254-9342-2a742d1a19e2', // Your Chat Engine project ID
+    userName: currUser.email, // The username for authentication
+    userSecret: 'Dddd1234' // The user secret for authentication
+  }
+  
 
   const styles = {
     truncatedText: {
@@ -72,10 +83,25 @@ const Profile = () => {
         console.error("Error fetching data:", error);
       }
     };
+    UserService.getOneUser(Cookies.get("user_id"))
+      .then(response=>{console.log("SUCCES",response);setCurrUser(response.data.user)})
+      .catch(error=>console.log("ERROR ❌",error))
 
     fetchData();
   }, []);
-
+  const handleMessage = async () => {
+    await getOrCreateChat(
+      creds,
+      { is_direct_chat: true, usernames: [user.email] },
+      (chat) => {
+        console.log("Chat created or retrieved:", chat);
+        console.log("Current User:", currUser);
+        console.log("Target User:", user);
+      }
+    )
+    nav("/chatapp")
+  };
+  
   return (
     <>
       <NavBar></NavBar>
@@ -85,7 +111,7 @@ const Profile = () => {
         <MDBCard className="mb-4 p-2 " style={{height:"73vh",width:"40%"}}>
           <MDBCardBody className="text-center">
             <MDBCardImage
-              src="https://i.imgur.com/7D7I6dI.png"
+              src={user.image}
               alt="avatar"
               className="rounded-circle"
               style={{ width: '150px',border:"2px solid black" }}
@@ -98,9 +124,9 @@ const Profile = () => {
             adipisicing elit. Natus provident dolor voluptatum corporis unde nesciunt,
              assumenda id sapiente voluptatibus veritatis adipisci quos atque. Consequuntur aperiam temporibus in hic, fuga alias? Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati omnis incidunt inventore ea ducimus quibusdam quaerat hic blanditiis? Earum nostrum illo, provident nesciunt quod molestiae consectetur voluptate dolores odio illum.</p>
                 <p className="text-muted mb-4">Bay Area, San Francisco, CA</p>
-                <div className="d-flex justify-content-center mb-2">
+                <div className="d-flex justify-content-center mb-2" onClick={console.log("test")}>
                
-                  <MDBBtn outline className="ms-1">Message</MDBBtn>
+                  <button className="btn btn-outline-info" onClick={handleMessage}>Message</button>
                 </div>
           </MDBCardBody>
         </MDBCard>
