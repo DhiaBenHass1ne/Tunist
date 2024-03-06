@@ -38,6 +38,18 @@ public class House {
 	@JsonBackReference
 	private User loaner;
 	
+	private String state;
+	
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+
+
 	@NotBlank(message = "The adress is required.")
 	@Size(min = 2, message = "Please enter a valid adress !")
 	private String adress;
