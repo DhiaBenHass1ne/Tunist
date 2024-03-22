@@ -2,6 +2,7 @@ import styles from "./attractions.module.css";
 import React, { useEffect, useState } from "react";
 import { Row, Col, Carousel } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import buttonn from "../components/button.module.css";
 import NavBar from "../components/NavBar";
 // import blogStyle from "./blog.module.css";
 import Arrow from "../components/Arrow";
@@ -14,7 +15,7 @@ import AttractionModal from "../components/AttractionModal";
 import style from "./modal.module.css";
 import inputStyle from "./input.module.css";
 
-const LandingPageAttractions = ({setChoice,choice,status,pos}) => {
+const LandingPageAttractions = ({setChoice,choice,status,pos,position,setNewCenter,newCenter, setPosition, positions,setPositions, setStatus}) => {
   const [attractions, setAttractions] = useState([]);
   const [carouselImagesPerArticle, setCarouselImagesPerArticle] = useState([]);
   const [modal, setModal] = useState(false);
@@ -79,21 +80,28 @@ const LandingPageAttractions = ({setChoice,choice,status,pos}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("position from form ===>"+position)
     await axios
       .post("http://localhost:8080/api/attractions", newArticle)
       .then((res) => {
         console.log(res.data);
+        console.log("positions before setter ===>"+positions)
+        // setPositions(positions.push(position))
+        console.log("positions after setter ===>"+positions)
+
         setNewArticle({
           title: "",
           description: "",
           media: [],
           author: { id: Cookies.get("user_id") },
-          State: "Bizerte",
-          position:[36.8065, 10.1815]
+          state: "Bizerte",
+          position:position
         });
         toggleModal();
       })
       .catch((err) => console.log(err));
+      setPositions([...positions,position])
+      setPosition([37,10])
     await axios
       .get("http://localhost:8080/api/attractions")
       .then((res) => {
@@ -218,6 +226,7 @@ const LandingPageAttractions = ({setChoice,choice,status,pos}) => {
             <button type="submit" className={`btn btn-success ${style.submitButton}`}>
               Submit
             </button>
+            <a className="offset-2" style={{textDecoration:"none", color:"blakc"}}  onClick={()=>{setStatus(false)}}>Go Back</a>
           </form>
           
         </div>
@@ -227,12 +236,14 @@ const LandingPageAttractions = ({setChoice,choice,status,pos}) => {
       :
     <div style={{ backgroundColor: "white", margin: "5rem" }}>
       {/* <h1 className=' text-center fw-bold m-5'>Welcome to the Real World!</h1> */}
-
-      <ul className={styles.cards}>
+        <div className="text-center">
+        <button   onClick={()=>{setStatus(true)}} className={`text-center ${buttonn.button17}`} >Add an attraction</button>
+        </div>
+      <ul className={styles.cards} >
       {attractions.map((a, index) => 
 
         <li  key={index}>
-          <div onClick={() => {setChoice(index);console.log("this is the choice", choice);}}   className={styles.card}>
+          <div onClick={() => {setChoice(index);setNewCenter(positions[index]);console.log("this is position =>"+newCenter+" and these are poses =>"+positions); console.log("this is the choice", choice);}}   className={styles.card}>
             <img
               src={a.attraction.media[1]}
               className={styles.card__image}

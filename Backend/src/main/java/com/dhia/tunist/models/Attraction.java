@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
@@ -41,7 +43,7 @@ public class Attraction {
 	    @JsonBackReference
 	    private User author;
 		
-		private List<BigDecimal> position;
+		private List<Float> position;
 		
 		@NotEmpty(message = "Username is required!")
 		@Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
@@ -50,7 +52,8 @@ public class Attraction {
 		@NotEmpty(message = "Username is required!")
 		@Size(min = 3, max = 150, message = "Username must be between 3 and 30 characters")
 		private String description;
-		
+	    @Lob
+	    @ElementCollection
 		private List<String> media;
 		
 		
@@ -177,11 +180,11 @@ public class Attraction {
 			return publicTours;
 		}
 
-		public List<BigDecimal> getPosition() {
+		public List<Float> getPosition() {
 			return position;
 		}
 
-		public void setPosition(List<BigDecimal> position) {
+		public void setPosition(List<Float> position) {
 			this.position = position;
 		}
 

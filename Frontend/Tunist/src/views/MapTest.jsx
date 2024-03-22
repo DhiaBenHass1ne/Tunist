@@ -5,20 +5,12 @@ import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
 
 
-const MapTest = ({ choice,pos ,setPos}) => {
-  const [positions, setPositions] = useState([
-    [33.8869, 9.5863],
-    [37.2744, 9.8730],
-    [36.4730, 10.1815],
-    [36.5340, 10.1815],
-    [36.5780, 10.1815]
-  ]);
-  
-  
+const MapTest = ({ choice,pos ,setPos,setNewCenter,newCenter, position, setPosition, positions,setPositions, status}) => {
+
+    
 
     function DraggableMarker({ pos, setPos }) {
       const [draggable, setDraggable] = useState(false);
-      const [position, setPosition] = useState([36.8065, 10.1815]);
       const markerRef = useRef(null);
     
       const eventHandlers = useMemo(
@@ -26,14 +18,17 @@ const MapTest = ({ choice,pos ,setPos}) => {
           dragend() {
             const marker = markerRef.current;
             if (marker != null) {
-              const newPosition = marker.getLatLng();
-              setPos([newPosition.lat, newPosition.lng]);
-              console.log('Marker position:', newPosition);
-              setPosition(marker.getLatLng());
+              var lat= marker.getLatLng().lat;
+              var lng= marker.getLatLng().lng;
+
+              // setPos([newPosition.lat, newPosition.lng]);
+              setPosition([lat,lng]);
+              console.log("postition from maptest ==>"+position)
+              console.log("this is pos==>"+position)
             }
           },
         }),
-        [setPos]
+        [position]
       );
     
       const toggleDraggable = useCallback(() => {
@@ -44,7 +39,8 @@ const MapTest = ({ choice,pos ,setPos}) => {
         <Marker
           draggable={draggable}
           eventHandlers={eventHandlers}
-          position={pos || position}
+          // position={pos || position}
+          position={position}
           ref={markerRef}
         >
           <Popup minWidth={90}>
@@ -57,28 +53,42 @@ const MapTest = ({ choice,pos ,setPos}) => {
         </Marker>
       );
     }
-
-
+    function ChangeView({ center }) {
+      const map = useMap();
+      useEffect(()=>{
+        map.setView(center);
+      },[center])
+      return null;
+    }
   
 
   return (
     <div className='map-container' style={{ height: '80vh', width: '98%' }}>
-      {console.log(choice)}
-      {console.log("Map Center:", positions[choice])}
-    <MapContainer key={JSON.stringify(positions[choice])} className='leaflet-container ' center={positions[choice]} zoom={13} scrollWheelZoom={true}      
->
+    <MapContainer 
+     className='leaflet-container ' center={newCenter ? newCenter:position} zoom={13} scrollWheelZoom={true}  >
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <DraggableMarker pos={pos} setPos={setPos} />
+      {
+        status && 
+        <DraggableMarker pos={pos} setPos={setPos} />
+      }
 
-      {JSON.stringify(choice)}
-    {/* <Marker position={positions[choice]}>
+      {
+        positions.map((p,idx)=>{
+          return (
+            
+             <Marker key={idx}  position={p}>
       <Popup>
         <img style={{width:"3rem"}} src="/public/tunisit-logo.png" alt="" />
       </Popup>
-    </Marker> */}
+    </Marker>
+            
+          )
+        })
+      }
+    <ChangeView center={ newCenter} />
   </MapContainer>
       </div>
     )

@@ -7,18 +7,18 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
@@ -26,6 +26,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -50,6 +51,18 @@ public class Guide {
 	@DecimalMax(value = "5.0", inclusive=true, message="Rating min is 5")
 	private double rating;
 	
+	@NotBlank(message="State is necessary in order to become a guide.")
+    private String state="none";
+	
+	
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	@NotNull(message = "Price is required!")
 	@Positive(message="Price can't be negative!")
     @DecimalMin(value = "0.0", inclusive = false, message="Price must be greater than zero!")
@@ -73,6 +86,8 @@ public class Guide {
     
 	
     @NotEmpty(message = "At least one language is required!")
+    @Lob
+    @ElementCollection
 	private List<String> cin;
 
     private String status="pending";

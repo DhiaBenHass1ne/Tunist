@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import NavBar from "../components/NavBar";
 
 const Tours = ({ refreshPage }) => {
     const [logged,setLogged] = useState({})

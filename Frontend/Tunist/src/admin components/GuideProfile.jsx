@@ -9,23 +9,26 @@ import {
   DeleteButton,
   ArrayField,
   ImageField,
+
 } from "react-admin";
 
 export const GuideProfileList = (props) => {
   return (
-    <List resource="guides" {...props}>
+    <List resource="guides"  {...props}>
       <Datagrid rowClick="edit">
         {/* <TextField source="_id" /> */}
         {/* <TextField source="fName" />
             <TextField source="lName" />  */}
         <ImageField source="cin" src="url"  />
         <TextField source="id" />
-        <TextField source="guide.cin.guide.cin" />
+        {/* <TextField source="guide.cin.guide.cin" /> */}
         <TextField source="guide.bio" />
         <TextField source="guide.price" />
         <TextField source="guide.languages"/>
         <TextField source="guide.status"/>
-         
+        <EditButton basePath='/guides' />
+        
+        <DeleteButton basePath='/guides' />  
         {/* <TextField source="adress" /> 
             <TextField source="phone" /> 
             <ImageField source="profilePic.url"  /> 

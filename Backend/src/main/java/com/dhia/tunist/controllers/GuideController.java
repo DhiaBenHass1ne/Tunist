@@ -11,9 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -96,22 +96,55 @@ public class GuideController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Guide> oneGuide(@PathVariable("id") Long id) {
+	public ResponseEntity<Map<String, Object>> oneGuide(@PathVariable("id") Long id) {
 		Guide guide = guideService.findGuideById(id);
 		if (guide != null) {
-			return new ResponseEntity<>(guide, HttpStatus.OK);
+			Map<String, Object> guideMap = new HashMap<>();
+			guideMap.put("id", guide.getId()); // Add article data
+			guideMap.put("guide", guide);
+			List<String> cin = guide.getCin();
+			if (cin!=null) {
+				
+			List<Map<String, String>> newCin = new ArrayList<>();
+			for (String image : cin) {
+				Map<String, String> map = new HashMap<>();
+				map.put("url", image);
+				newCin.add(map);
+			}
+			guideMap.put("cin", newCin);
+			}
+			guideMap.put("publicTours", guide.getPublicTour());
+			User user = guide.getUser(); // Assuming you have a PublisherModel class
+			if (user != null && user.getId() != null) {
+				System.out.println("first attraction ===>"+user) ;
+				
+				Map<String, Object> userMap = new HashMap<>();
+				userMap.put("id", user.getId());
+				userMap.put("firstName", user.getFirstName());
+				userMap.put("lastName", user.getLastName());
+				userMap.put("image", user.getImage());
+				guideMap.put("user", userMap);}
+			return new ResponseEntity<>(guideMap, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@PatchMapping("/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Guide> updateGuide(@RequestBody @Valid Guide guide, @PathVariable("id") Long id,
 			HttpSession session) {
 		guide.setId(id);
+		System.out.println("put method start");
+		Guide updatedGuide = guideService.findGuideById(id);
+		System.out.println("edit form status===>"+guide.getStatus());
+		updatedGuide.setStatus(guide.getStatus());
+		System.out.println("updating guide status befor update"+ updatedGuide.getStatus());
+		guideService.updateGuide(updatedGuide);
+		System.out.println("guide status after after==>"+updatedGuide.getStatus());
 		
-		guideService.updateGuide(guide);
-		return new ResponseEntity<>(guide, HttpStatus.CREATED);
+		
+//		guideService.updateGuide(guide);  maybe use this with post man
+		return new ResponseEntity<>(updatedGuide, HttpStatus.CREATED);
 
 	}
 

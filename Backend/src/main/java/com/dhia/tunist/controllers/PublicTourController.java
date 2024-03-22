@@ -212,13 +212,28 @@ public class PublicTourController {
         	
             Map<String, Object> tourMap = new HashMap<>();
 			tourMap.put("id", tour.getId()); // Add article data
-            tourMap.put("article", tour); // Add article data
+            tourMap.put("date", tour.getDate()); // Add article data
+            List<Map<String, Object>> allattractions = new ArrayList <>();
+            List<Attraction> foundAttractions = tour.getPublicAttractions();
+            if(foundAttractions!=null) {
+            	for(Attraction attraction : foundAttractions) {
+            		Map<String, Object> attractionMap = new HashMap<>();
+            		attractionMap.put("title",attraction.getTitle());
+            		attractionMap.put("description",attraction.getDescription());
+            		attractionMap.put("state",attraction.getState());
+//            		attractionMap.put("title",attraction.getAuthor());
+            		attractionMap.put("media",attraction.getMedia());
+            		attractionMap.put("images",attraction.getImages());
+            		allattractions.add(attractionMap);
+            	}
+            	tourMap.put("attractions",allattractions );
+            }
             Guide guide = tour.getPublicGuide(); // Assuming you have a PublisherModel class
             if (guide != null && guide.getId() != null) {
             	Map<String, Object> guidetMap = new HashMap<>();
 				guidetMap.put("id", guide.getId()); 
-				guidetMap.put("privateTours", guide.getPrivateTour());
-				guidetMap.put("publicTours", guide.getPublicTour());
+//				guidetMap.put("privateTours", guide.getPrivateTour());
+//				guidetMap.put("publicTours", guide.getPublicTour());
 				guidetMap.put("bio", guide.getBio());
 				guidetMap.put("price", guide.getPrice());
 				guidetMap.put("rating", guide.getRating());
@@ -243,8 +258,8 @@ public class PublicTourController {
             	{
             	Map<String, Object> touristMap = new HashMap<>();
             	touristMap.put("id", tourist.getId()); 
-            	touristMap.put("privateTours", tourist.getPrivateTour());
-            	touristMap.put("publicTours", tourist.getPublicTour());
+//            	touristMap.put("privateTours", tourist.getPrivateTour());
+//            	touristMap.put("publicTours", tourist.getPublicTour());
             	touristMap.put("nationality", tourist.getNationality());
 			
 				if(tourist!=null && tourist.getUser() !=null) {	
@@ -254,8 +269,8 @@ public class PublicTourController {
 				userMap.put("firstName", tourist.getUser().getFirstName());
 				userMap.put("lastName", tourist.getUser().getLastName());
 				userMap.put("image", tourist.getUser().getImage());
-				userMap.put("attraction", tourist.getUser().getAttractions());
-				userMap.put("houses", tourist.getUser().getHouses());
+//				userMap.put("attraction", tourist.getUser().getAttractions());
+//				userMap.put("houses", tourist.getUser().getHouses());
 				touristMap.put("user", userMap);
 				}
 				

@@ -14,6 +14,10 @@ import LoginPage from '../admin components/LoginPage';
 import {UserList} from '../admin components/users'
 import {ArticleList} from '../admin components/articles'
 import {AttractionList} from '../admin components/attractions'
+import {GuideProfileList} from '../admin components/GuideProfile'
+import GuideProfileEdit from '../admin components/GuideProfileEdit';
+
+// import {GuideRequestList} from '../admin components/GuideRequest'
 
 
 
@@ -32,10 +36,12 @@ import {AttractionList} from '../admin components/attractions'
 const AdminDash = () => {
   return (
     <div>
-        <Admin basename="/admin" loginPage={LoginPage}  authProvider={adminAuth}  dataProvider= {simpleRestProvider('http://localhost:8080/api' )} >
+        <Admin basename="/admin" loginPage={LoginPage} authProvider={adminAuth}  dataProvider= {simpleRestProvider('http://localhost:8080/api' )} >
     <Resource name="users" list={UserList} />
     <Resource name="articles" list={ArticleList} />
     <Resource name="attractions" list={AttractionList} />
+    <Resource name="guides" list={GuideProfileList} edit={GuideProfileEdit}  />
+    {/* <Resource name="attractions" list={AttractionList} /> */}
 
   </Admin>
         </div>
