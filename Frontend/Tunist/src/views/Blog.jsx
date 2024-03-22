@@ -20,7 +20,9 @@ const Blog = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:8080/api/articles");
-        setArticles(response.data);
+        const sortedArticles = response.data.sort((a, b) => b.id - a.id);
+
+        setArticles(sortedArticles);
 
         const extractedMedia = response.data.map((article) =>
           article.media.map((mediaItem) => mediaItem.url)
@@ -124,7 +126,8 @@ const Blog = () => {
                       > <img
                         className={blogStyle.cardThumb}
                         style={{ border: "3px solid #930412" }}
-                        src="https://i.imgur.com/7D7I6dI.png"
+                        src={a.publisher.image}
+
                         alt=""
                       />
                       </Link>
@@ -195,7 +198,7 @@ const Blog = () => {
                       > <img
                         className={blogStyle.cardThumb}
                         style={{ border: "3px solid #930412" }}
-                        src="https://i.imgur.com/7D7I6dI.png"
+                        src={a.publisher.image}
                         alt=""
                       />
                       </Link>

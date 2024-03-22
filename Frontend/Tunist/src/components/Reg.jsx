@@ -129,7 +129,7 @@ const Reg = ({ refreshPage, component, setComponent }) => {
             <p className='text-secondary'>Wether you&apos;re a tourist visiting our country or  a tunisian looking to make someone&apos;s trip unforgettable</p>
             </div>
 
-			<form className='' onSubmit={handleSubmit}>
+			<form style={{marginLeft:"30%"}} onSubmit={handleSubmit}>
                 <div className="mb-3 text-center" >
                     { imgStatus === "Empty"?
                         <img className='iconColor' src="./camera.svg" alt="Upload" height={75} onClick={handleClick} style={{cursor: "pointer" }}/>: 

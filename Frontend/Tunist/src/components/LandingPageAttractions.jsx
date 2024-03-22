@@ -163,6 +163,14 @@ const LandingPageAttractions = ({setChoice,choice,status,pos,position,setNewCent
     // You can perform any other logic or state updates based on the choice
   };
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
 
   
   return (
@@ -224,7 +232,7 @@ const LandingPageAttractions = ({setChoice,choice,status,pos,position,setNewCent
             </div>
 
             <button type="submit" className={`btn btn-success ${style.submitButton}`}>
-              Submit
+              Post
             </button>
             <a className="offset-2" style={{textDecoration:"none", color:"blakc"}}  onClick={()=>{setStatus(false)}}>Go Back</a>
           </form>

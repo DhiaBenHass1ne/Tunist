@@ -46,11 +46,11 @@ public class Attraction {
 		private List<Float> position;
 		
 		@NotEmpty(message = "Username is required!")
-		@Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
+		@Size(min = 3, max = 30, message = "title must be between 3 and 30 characters")
 		private String title;
 		
 		@NotEmpty(message = "Username is required!")
-		@Size(min = 3, max = 150, message = "Username must be between 3 and 30 characters")
+		@Size(min = 3, max = 250, message = "description must be between 3 and 30 characters")
 		private String description;
 	    @Lob
 	    @ElementCollection

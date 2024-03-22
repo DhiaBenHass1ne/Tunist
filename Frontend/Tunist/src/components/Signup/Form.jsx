@@ -6,9 +6,9 @@ const Form = (props) => {
   const [component,setComponent]=useState('Login');
 
   return (
-    <div>
+    <div >
     { component === "Register"?
-    <div>
+    <div >
       <Reg component={component} setComponent={setComponent}/>
     </div>:
     <div><Log component={component} setComponent={setComponent}/></div>}

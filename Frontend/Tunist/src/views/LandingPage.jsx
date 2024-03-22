@@ -114,6 +114,8 @@ const LandingPage = () => {
         
             <Arrow ></Arrow>
 </div>
+
+<h1 className='text-center mt-5 ' style={{color:"#930412",textShadow:"0px 1px 1px black"}}>Our Most Visited Attractions</h1>
       <LandingPageAttractions status={false} />
       
       <div

@@ -94,9 +94,10 @@ const NavBar = () => {
         </div>
         {Cookies.get("user_id") ? (
           <div style={styles.right}>
-            <button className={buttonn.button17}>
+            <Link to={`/profile/${Cookies.get("user_id")}`} className={buttonn.button17}>
+              {" "}
               Profile
-            </button>
+            </Link>
             <button className={buttonn.button17} onClick={logout}>
               Logout
             </button>
@@ -128,13 +129,22 @@ const NavBar = () => {
             }}
           ></i>
           <div style={{ position: "absolute", top: "1rem" }}>
-            <button className={buttonn.button17}>Attractions</button>
-            <Link to="/blog" className={buttonn.button17}>
+          <Link to="/blog" className={buttonn.button17}>
               {" "}
               Blog
             </Link>
-            <button className={buttonn.button17}>Guides</button>
-            <button className={buttonn.button17}>Houses</button>
+            <Link to="/attractions" className={buttonn.button17}>
+              {" "}
+              Attractions
+            </Link>
+            <Link to="/guides" className={buttonn.button17}>
+              {" "}
+              Guides
+            </Link>
+            <Link to="/houses" className={buttonn.button17}>
+              {" "}
+              Houses
+            </Link>
           </div>
           {/* Content for the overlay page */}
         </div>
